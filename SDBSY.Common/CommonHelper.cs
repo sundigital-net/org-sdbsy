@@ -15,7 +15,7 @@ namespace SDBSY.Common
 {
     public class CommonHelper
     {
-        //身份证验证规则
+        //身份证验证规则,tt
         public static bool CheckIDCard18(string Id)
         {
             long n = 0;
