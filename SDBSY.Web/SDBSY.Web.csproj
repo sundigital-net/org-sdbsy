@@ -1054,6 +1054,7 @@
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\EducateController.cs" />
     <Compile Include="Controllers\FoodController.cs" />
+    <Compile Include="Controllers\GoodsController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
@@ -1082,8 +1083,14 @@
     <Compile Include="Models\EducateIndexViewModel.cs" />
     <Compile Include="Models\EducateListViewModel.cs" />
     <Compile Include="Models\FoodAddPostModel.cs" />
+    <Compile Include="Models\FoodApplyRecordAddPostModel.cs" />
     <Compile Include="Models\FoodBuyRecordAddPostModel.cs" />
     <Compile Include="Models\FoodBuyRecordsListViewModel.cs" />
+    <Compile Include="Models\GoodsAddPostModel.cs" />
+    <Compile Include="Models\GoodsApplyRecordAddPostModel.cs" />
+    <Compile Include="Models\GoodsApplyRecordsListView.cs" />
+    <Compile Include="Models\GoodsBuyRecordAddPostModel.cs" />
+    <Compile Include="Models\GoodsBuyRecordListViewModel.cs" />
     <Compile Include="Models\InvoiceIndexViewModel.cs" />
     <Compile Include="Models\InvoiceListViewModel.cs" />
     <Compile Include="Models\MyJsonResult.cs" />
@@ -1165,6 +1172,10 @@
     <Content Include="Views\Menu\List.cshtml" />
     <Content Include="Views\Invoice\List.cshtml" />
     <Content Include="Views\Invoice\Index.cshtml" />
+    <Content Include="Views\Goods\List.cshtml" />
+    <Content Include="Views\Goods\Add.cshtml" />
+    <Content Include="Views\Goods\BuyRecordsList.cshtml" />
+    <Content Include="Views\Goods\BuyRecordAdd.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

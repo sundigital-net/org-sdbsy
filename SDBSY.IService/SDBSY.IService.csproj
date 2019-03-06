@@ -53,6 +53,7 @@
     <Compile Include="ICountryService.cs" />
     <Compile Include="IDataDictionaryService.cs" />
     <Compile Include="IFoodService.cs" />
+    <Compile Include="IGoodsService.cs" />
     <Compile Include="IGuardianService.cs" />
     <Compile Include="IInvoiceService.cs" />
     <Compile Include="IMenuService.cs" />

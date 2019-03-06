@@ -33,10 +33,11 @@ namespace SDBSY.Web.Controllers
         {
             return View();
         }
+        [HttpPost]
         [CheckPermission("Food.Add")]
         public ActionResult Add(FoodAddPostModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
             }
@@ -135,11 +136,11 @@ namespace SDBSY.Web.Controllers
             return Json(new AjaxResult { Status = "ok" });
         }
         [CheckPermission("FoodBuyRecord.List")]
-        public ActionResult BuyRecordsList(long id,DateTime? startTime,DateTime? endTime)
+        public ActionResult BuyRecordsList(long id, DateTime? startTime, DateTime? endTime)
         {
             //食材
             var foods = foodSvc.GetAll().ToList();
-            foods.Insert(0, new FoodDTO { Name = "全部" ,Id=0});
+            foods.Insert(0, new FoodDTO { Name = "全部", Id = 0 });
             //食物的入库记录
             FoodBuyRecordDTO[] records;
             if (id <= 0)
@@ -150,21 +151,22 @@ namespace SDBSY.Web.Controllers
             {
                 records = foodSvc.GetAllRecords(id);
             }
-            if(startTime!=null)
+            if (startTime != null)
             {
                 records = records.Where(t => t.BuyTime >= startTime.Value).ToArray();
             }
-            if(endTime!=null)
+            if (endTime != null)
             {
                 records = records.Where(t => t.BuyTime < endTime.Value.AddDays(1)).ToArray();
             }
 
-            FoodBuyRecordsListViewModel model = new FoodBuyRecordsListViewModel() {
+            FoodBuyRecordsListViewModel model = new FoodBuyRecordsListViewModel()
+            {
                 Foods = foods.ToArray(),
-                Records=records,
-                FoodId=id,
-                StartTime=startTime==null?"":startTime.Value.ToShortDateString(),
-                EndTime=endTime==null?"":endTime.Value.ToShortDateString(),
+                Records = records,
+                FoodId = id,
+                StartTime = startTime == null ? "" : startTime.Value.ToShortDateString(),
+                EndTime = endTime == null ? "" : endTime.Value.ToShortDateString(),
             };
             return View(model);
         }
@@ -213,11 +215,11 @@ namespace SDBSY.Web.Controllers
                 string path = "";
                 CreateExcel(records, out path);
                 path = path.Remove(0, 1);
-                return Json(new AjaxResult { Status = "ok" ,Data=path});
+                return Json(new AjaxResult { Status = "ok", Data = path });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return Json(new AjaxResult { Status = "error",ErrorMsg=ex.Message });
+                return Json(new AjaxResult { Status = "error", ErrorMsg = ex.Message });
             }
         }
         private void CreateExcel(FoodBuyRecordDTO[] records, out string path)
@@ -257,7 +259,7 @@ namespace SDBSY.Web.Controllers
                 row.GetCell(4).SetCellValue(Convert.ToString(record.UnitPrice));//单价
                 row.GetCell(5).SetCellValue(Convert.ToString(record.TotalPrice));//总金额
                 row.GetCell(6).SetCellValue(Convert.ToString(record.Remark));//备注
-                for(int j=0;j<7;j++)//设置单元格格式
+                for (int j = 0; j < 7; j++)//设置单元格格式
                 {
                     row.GetCell(j).CellStyle = cellStyle;
                 }
@@ -278,7 +280,7 @@ namespace SDBSY.Web.Controllers
             {
                 hssfworkbook.Write(fs);
             }
-            
+
         }
     }
 }

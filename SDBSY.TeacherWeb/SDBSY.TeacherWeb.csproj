@@ -195,6 +195,7 @@
     <Compile Include="App_Start\ValidateFileAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CertificateController.cs" />
+    <Compile Include="Controllers\GoodsApplyRecordController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
@@ -202,6 +203,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ApplyRecordEditPostModel.cs" />
+    <Compile Include="Models\ApplyRecordEditViewModel.cs" />
+    <Compile Include="Models\ApplyRecordListViewModel.cs" />
+    <Compile Include="Models\ApplyRecordAddViewModel.cs" />
+    <Compile Include="Models\AppplyRecordAddPostModel.cs" />
     <Compile Include="Models\CertificateAddPostModel.cs" />
     <Compile Include="Models\CertificateAddViewModel.cs" />
     <Compile Include="Models\CertificateEditPostModel.cs" />
@@ -258,6 +264,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\GoodsApplyRecord\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SDBSY.Common\SDBSY.Common.csproj">

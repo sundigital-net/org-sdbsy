@@ -126,6 +126,7 @@
     <Compile Include="Entities\UserEntity.cs" />
     <Compile Include="Entities\WorkEntity.cs" />
     <Compile Include="FoodService.cs" />
+    <Compile Include="GoodsService.cs" />
     <Compile Include="GuardianService.cs" />
     <Compile Include="InvoiceService.cs" />
     <Compile Include="MenuService.cs" />

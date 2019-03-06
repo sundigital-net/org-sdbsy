@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
-using CodeCarvings.Piczard;
 using Newtonsoft.Json;
 using SDBSY.Common;
 using SDBSY.DTO;
@@ -35,7 +30,7 @@ namespace SDBSY.TeacherWeb.Controllers
             var teacher = teacherSvc.GetByAdminId(id);
             if (teacher == null)
             {
-                return View("Error", (object)"请先添加教师信息");
+                return View("Error", (object)"请先添加ddsjfj教师信息");
             }
 
             var classes = dataSvc.GetByName("ClassType");
