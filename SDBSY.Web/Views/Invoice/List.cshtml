@@ -33,6 +33,7 @@
             <span class="l">
                 @*<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
                 *@
+                <a href="javascript:;" onclick="daochu()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe644;</i>批量导出</a>
             </span>
             <span class="r">共有数据：<strong>@Model.Invoices.Count()</strong> 条</span>
         </div>
@@ -97,7 +98,41 @@
                 ]
             });
         });
-        
+        /*批量导出*/ 
+        function daochu() {
+            var vals = [];
+            $('input[name="selectedIds"]:checked').each(function (index, item) {
+                vals.push($(this).val());
+            });
+            if (vals.length <= 0) {
+                layer.msg('请选择要导出的票据信息!', { icon: 2, time: 3000 });
+                return;
+            }
+            //var formData = $("#formList").serializeArray();
+            //var selectedIds = [];
+            //$.each(formData, function (i, field) {
+            //    selectedIds.push(field.value);
+            //});
+
+            $.ajax({
+                url: "/Invoice/ExportExcle",
+                type: "post",
+                data: { selectedIds: vals },
+                dataType: "json",
+                success: function (res) {
+                    if (res.status == "ok") {
+                        layer.msg('正在导出!', { icon: 1, time: 3000 }, function () {
+                            location.href = res.data;
+                        });
+                    }
+                    else {
+                        layer.msg("导出错误:" + res.errorMsg, { icon: 2, time: 3000 });
+                    }
+                },
+                error: function () { layer.msg("网络请求出错", { icon: 2, time: 3000 }); }
+            });
+        }
+
         /*批量删除*/
         function datadel() {
             var vals = [];

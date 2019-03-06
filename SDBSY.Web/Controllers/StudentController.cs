@@ -30,11 +30,12 @@ namespace SDBSY.Web.Controllers
         public IGuardianService guaSvc { get; set; }
         public IAdminLogService logSvc { get; set; }
         // GET: Student
-        //[CheckPermission("Stu.List")]
+
         //public StudentController(IStudentService stuSvc)
         //{
         //    this.stuSvc = stuSvc;
         //}
+        [CheckPermission("Stu.List")]
         public ActionResult List(long classId, DateTime? startTime, DateTime? endTime)//在园
         {
             var students = GetStudents(classId, startTime, endTime);
@@ -73,14 +74,14 @@ namespace SDBSY.Web.Controllers
             StudentDTO[] students = stuSvc.GetById(selectIds);
             return students;
         }
-        //[CheckPermission("Stu.List")]
+        [CheckPermission("Stu.List")]
         public ActionResult NewList()//新报名
         {
             var students = stuSvc.GetAll().Where(t => t.IsFinishSchool == false && t.Status == ShenHeZhuangTai.MoRen).ToArray();
 
             return View(students);
         }
-        //[CheckPermission("Stu.List")]
+        [CheckPermission("Stu.List")]
         public ActionResult BiYeList()//已毕业
         {
             var students = stuSvc.GetAll().Where(t => t.ClassId == null && t.IsFinishSchool == true).ToArray();
@@ -670,7 +671,7 @@ namespace SDBSY.Web.Controllers
             return View(students);
         }
         [HttpPost]
-        //[CheckPermission("Stu.List")]
+        [CheckPermission("Stu.List")]
         public ActionResult ShenHe(long id, bool pass)
         {
             using (var tran = new TransactionScope())//事务开启

@@ -259,5 +259,30 @@ namespace SDBSY.Service
                 
             }
         }
+
+        public InvoiceDTO[] GetAll(long[] ids)
+        {
+            if (ids.Length <= 0)
+            {
+                throw new ArgumentException("未选中任何数据");
+            }
+
+            using (var mc = new MyDBContext())
+            {
+                var bs=new BaseService<InvoiceEntity>(mc);
+                var invs= bs.GetAll().Include(t => t.Class).Include(t => t.Teacher).AsNoTracking().Where(t => ids.Contains(t.Id))
+                    .ToList();
+                var list=new List<InvoiceDTO>();
+                if (invs.Count > 0)
+                {
+                    foreach (var inv in invs)
+                    {
+                        list.Add(ToDto(inv));
+                    }
+                }
+
+                return list.ToArray();
+            }
+        }
     }
 }
