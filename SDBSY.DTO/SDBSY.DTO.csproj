@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="AdminLogDTO.cs" />
     <Compile Include="AdminUserDTO.cs" />
+    <Compile Include="ApplyRecordPicAddNewDTO.cs" />
     <Compile Include="BaseDTO.cs" />
     <Compile Include="CertificateAddNewDTO.cs" />
     <Compile Include="CertificateEditDTO.cs" />

@@ -16,6 +16,7 @@ namespace SDBSY.Web.Controllers
         public IAdminUserService adminSvc { get; set; }
         public IRoleService roleSvc { get; set; }
         public IAdminLogService logSvc { get; set; }
+        public IPermissionService permSvc { get; set; }
         // GET: AdminUser
         [CheckPermission("AdminUser.Index")]
         public ActionResult Index()
@@ -68,6 +69,32 @@ namespace SDBSY.Web.Controllers
                 }
             }
 
+        }
+        [HttpGet]
+        [CheckPermission("AdminUser.Edit")]
+        public ActionResult Edit(long id)
+        {
+            var roles = roleSvc.GetByAdminUserId(id);
+            var adminuser = adminSvc.GetById(id);
+            var allRoles = roleSvc.GetAll();
+            AdminUserEditGetModel model = new AdminUserEditGetModel();
+            
+            model.Roles = roles;
+            model.AllRoles = allRoles;
+            model.AdminUser = adminuser;
+            return View(model);
+        }
+        [HttpPost]
+        [CheckPermission("AdminUser.Edit")]
+        public ActionResult Edit(AdminUserEditPostModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return Json(new AjaxResult { Status = "Error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
+            }
+            roleSvc.Update(model.Id, model.Name);
+            permSvc.UpdatePermIds(model.Id, model.PermissionIds);
+            return Json(new AjaxResult { Status = "ok" });
         }
         [HttpPost]
         [CheckPermission("AdminUser.Delete")]

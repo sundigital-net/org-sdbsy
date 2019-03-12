@@ -23,6 +23,7 @@ namespace SDBSY.IService
         GoodsAllApplyRecordDTO[] GetAllApplyRrcord(DateTime applytime, DateTime returntime);
         GoodsAllApplyRecordDTO[] GetAllApplyRrcord();
         GoodsAllApplyRecordDTO[] GetAllApplyRrcord(long[] ids);
+        long AddNewApplyRecord(GoodsAllApplyRecordDTO goodsAllApplyRecord);
         void RecordDelete(long id);
 
     }

@@ -40,7 +40,7 @@ namespace SDBSY.Web.Controllers
             {
                 try
                 {
-                    long id = goodsSvc.AddNew(model.Name, model.Unit, model.Seller, model.Maker,model.Format);
+                    long id = goodsSvc.AddNew(model.Name, model.Unit, model.Seller, model.Maker, model.Format);
                     long userId = (long)AdminHelper.GetUserId(HttpContext);
                     logSvc.AddNew(userId, "添加物品,id=" + id);
                     tran.Complete();
@@ -108,7 +108,7 @@ namespace SDBSY.Web.Controllers
                     tran.Complete();
                     return Json(new AjaxResult { Status = "ok" });
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return Json(new AjaxResult { Status = "error", ErrorMsg = ex.Message });
                 }
@@ -118,12 +118,12 @@ namespace SDBSY.Web.Controllers
         [CheckPermission("GoodsBuyRecord.Delete")]
         public ActionResult RecordsPatchDel(long[] selectedIds)
         {
-            if(selectedIds==null||selectedIds.Length<=0)
+            if (selectedIds == null || selectedIds.Length <= 0)
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "未选中任何信息" });
             }
             long userId = (long)AdminHelper.GetUserId(HttpContext);
-            foreach(long id in selectedIds)
+            foreach (long id in selectedIds)
             {
                 goodsSvc.RecordDelete(id);
                 logSvc.AddNew(userId, "删除入库记录,id=" + id);
@@ -134,8 +134,8 @@ namespace SDBSY.Web.Controllers
         public ActionResult BuyRecordsList(long id, DateTime? startTime, DateTime? endTime)
         {
             //食材
-            var foods = goodsSvc.GetAll().ToList();
-            foods.Insert(0, new GoodsDTO { Name = "全部", Id = 0 });
+            var goods = goodsSvc.GetAll().ToList();
+            goods.Insert(0, new GoodsDTO { Name = "全部", Id = 0 });
             //食物的入库记录
             GoodsAllRecordDTO[] records;
             if (id <= 0)
@@ -157,7 +157,7 @@ namespace SDBSY.Web.Controllers
 
             GoodsBuyRecordListViewModel model = new GoodsBuyRecordListViewModel()
             {
-                Goods = foods.ToArray(),
+                Goods = goods.ToArray(),
                 Records = records,
                 GoodsId = id,
                 StartTime = startTime == null ? "" : startTime.Value.ToShortDateString(),
@@ -165,7 +165,7 @@ namespace SDBSY.Web.Controllers
             };
             return View(model);
         }
-        [HttpPost]
+        [HttpGet]
         [CheckPermission("GoodsBuyRecord.Add")]
         public ActionResult BuyRecordAdd()
         {
@@ -176,7 +176,7 @@ namespace SDBSY.Web.Controllers
         [CheckPermission("GoodsBuyRecord.Add")]
         public ActionResult BuyRecordAdd(GoodsBuyRecordAddPostModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
             }
@@ -200,6 +200,8 @@ namespace SDBSY.Web.Controllers
                 }
             }
         }
+        [HttpPost]
+        [CheckPermission("GoodsApplyRecord.Delete")]
         public ActionResult ApplyRecordDelete(long id)
         {
             using (var tran = new TransactionScope())
@@ -237,10 +239,8 @@ namespace SDBSY.Web.Controllers
         [CheckPermission("GoodsAllApplyRecord.List")]
         public ActionResult ApplyRecordsList(long id, DateTime? applyTime, DateTime? returnTime)
         {
-            //食材
             var goods = goodsSvc.GetAll().ToList();
             goods.Insert(0, new GoodsDTO { Name = "全部", Id = 0 });
-            //食物的入库记录
             GoodsAllApplyRecordDTO[] records;
             if (id <= 0)
             {//所有记录
@@ -269,7 +269,7 @@ namespace SDBSY.Web.Controllers
             };
             return View(model);
         }
-        [HttpPost]
+        [HttpGet]
         [CheckPermission("GoodsAllApplyRecord.Add")]
         public ActionResult ApplyRecordAdd()
         {
@@ -277,7 +277,7 @@ namespace SDBSY.Web.Controllers
             return View(goods);
         }
         [HttpPost]
-        [CheckPermission("GoodsBuyRecord.Add")]
+        [CheckPermission("GoodsAllApplyRecord.Add")]
         public ActionResult ApplyRecordAdd(GoodsApplyRecordAddPostModel model)
         {
             if (!ModelState.IsValid)
@@ -288,7 +288,7 @@ namespace SDBSY.Web.Controllers
             {
                 try
                 {
-                    long id = goodsSvc.AddNewGoodsApplyRecord(model.GoodsId,model.ClassId,model.TeacherId,(DateTime)model.ApplyTime, (DateTime)model.ReturnTime);
+                    long id = goodsSvc.AddNewGoodsApplyRecord(model.GoodsId, model.ClassId, model.TeacherId, (DateTime)model.ApplyTime, (DateTime)model.ReturnTime);
                     long userId = (long)AdminHelper.GetUserId(HttpContext);
                     logSvc.AddNew(userId, "添加申领记录,id" + id);
                     tran.Complete();
@@ -306,5 +306,5 @@ namespace SDBSY.Web.Controllers
         }
 
 
-        }
+    }
 }

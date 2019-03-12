@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,8 +29,11 @@ namespace SDBSY.DTO
 {
     public class GoodsAllRecordDTO:BaseDTO
     {
+        public string Unit { get; set; }
         public long GoodsId { get; set; }
         public string GoodsName { get; set; }
+        [DisplayName("单位")]
+        public string GoodsUnit { get; set; }
         public DateTime BuyTime { get; set; }
         /// <summary>
         /// 数量

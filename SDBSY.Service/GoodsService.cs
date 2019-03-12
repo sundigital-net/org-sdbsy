@@ -208,6 +208,8 @@ namespace SDBSY.Service
         {
             GoodsAllRecordDTO dto = new GoodsAllRecordDTO()
             {
+                GoodsName =entity.Goods.Name,
+                Unit=entity.Goods.Unit,
                 Id = entity.Id,
                 GoodsId = entity.GoodsId,
                 BuyTime = entity.BuyTime,
@@ -285,6 +287,11 @@ namespace SDBSY.Service
                 BaseService<GoodsBuyRecordEntity> bs = new BaseService<GoodsBuyRecordEntity>(mc);
                 bs.MarkDeleted(id);
             }
+        }
+
+        public long AddNewApplyRecord(GoodsAllApplyRecordDTO goodsAllApplyRecord)
+        {
+            throw new NotImplementedException();
         }
     }
 }

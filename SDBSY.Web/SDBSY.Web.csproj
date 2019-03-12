@@ -1071,6 +1071,8 @@
     </Compile>
     <Compile Include="Models\AdminLoginModel.cs" />
     <Compile Include="Models\AdminUserAddPostModel.cs" />
+    <Compile Include="Models\AdminUserEditGetModel.cs" />
+    <Compile Include="Models\AdminUserEditPostModel.cs" />
     <Compile Include="Models\CertificateListViewModel.cs" />
     <Compile Include="Models\ChangePasswordPostModel.cs" />
     <Compile Include="Models\ChooseFieldPostModel.cs" />
@@ -1176,6 +1178,8 @@
     <Content Include="Views\Goods\Add.cshtml" />
     <Content Include="Views\Goods\BuyRecordsList.cshtml" />
     <Content Include="Views\Goods\BuyRecordAdd.cshtml" />
+    <Content Include="Views\AdminUser\Edit.cshtml" />
+    <Content Include="Views\Goods\ApplyRecordList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -29,6 +29,8 @@ namespace SDBSY.Service.Entities
     public class GoodsBuyRecordEntity:BaseEntity
     {
         public long GoodsId { get; set; }
+        //public string GoodsName { get; set; }
+        //public string Unit { get; set; }
         public virtual GoodsEntity Goods { get; set; }
         public DateTime BuyTime { get; set; }
         /// <summary>

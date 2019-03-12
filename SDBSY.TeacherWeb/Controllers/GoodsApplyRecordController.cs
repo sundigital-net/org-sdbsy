@@ -57,7 +57,7 @@ namespace SDBSY.TeacherWeb.Controllers
                 ApplyTime=model.ApplyTime,
                 ReturnTime=model.ReturnTime
             };
-            long id = applyrecordSvc.AddNewGoodsApplyRecord(dto);
+            long id = applyrecordSvc.AddNewApplyRecord(dto);
             //2.保存图片
             if (model.UpFiles.Length > 0)
             {
@@ -70,12 +70,12 @@ namespace SDBSY.TeacherWeb.Controllers
                         var result = await SaveImgAsync(file);
                         if (result.Status == "ok")
                         {
-                            var dto1 = new InvoicePicAddNewDTO()
+                            var dto1 = new ApplyRecordPicAddNewDTO()
                             {
-                                InvocieId = id,
+                                ApplyRecordId = id,
                                 Url = result.Data.ToString()
                             };
-                            long picId = applyrecordSvc.AddNew(dto1);
+                            long picId = applyrecordSvc.AddNewApplyRecord(dto1);
                             //log.Debug("保存图片成功-------");
                         }
                         else

@@ -100,7 +100,14 @@ namespace SDBSY.Service
             using (MyDBContext ctx = new MyDBContext())
             {
                 BaseService<RoleEntity> bs = new BaseService<RoleEntity>(ctx);
-                return bs.GetById(roleId).Permissions.ToList().Select(p => ToDTO(p)).ToArray();
+                var role = bs.GetById(roleId);
+                if(role!=null)
+                {
+                    var pers = role.Permissions.ToList();
+                    return pers.Select(p => ToDTO(p)).ToArray();
+                }
+                return null;
+                
             }
         }
 
