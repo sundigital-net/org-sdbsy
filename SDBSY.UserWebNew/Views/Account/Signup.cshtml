@@ -1,0 +1,270 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en" class="hairlines" style="font-size: 36px;">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="~/favicon.ico">
+    <title>滨州市实验幼儿园信息采集</title>
+    <link href="~/content/css/chunk-3564dafe.db9c52e2.css" rel="prefetch">
+    <link href="~/content/css/chunk-48e2927b.abd9d418.css" rel="prefetch">
+    <link href="~/content/css/chunk-4e387861.12a0c677.css" rel="prefetch">
+    <link href="~/content/css/chunk-60c3cfac.abd9d418.css" rel="prefetch">
+    <!--<link href="~/content/js/chunk-3564dafe.14c97d61.js" rel="prefetch">
+    <link href="~/content/js/chunk-48e2927b.f0a48ea8.js" rel="prefetch">
+    <link href="~/content/js/chunk-4e387861.127193bf.js" rel="prefetch">
+    <link href="~/content/js/chunk-60c3cfac.7ac13b85.js" rel="prefetch">-->
+    <link href="~/content/css/app.a3ddf99b.css" rel="preload" as="style">
+    <link href="~/content/css/chunk-vendors.7d5f0cf8.css" rel="preload" as="style">
+    <!--<link href="~/content/js/app.e9485b78.js" rel="preload" as="script">
+    <link href="~/content/js/chunk-vendors.e44ea13b.js" rel="preload" as="script">-->
+    <link href="~/content/css/chunk-vendors.7d5f0cf8.css" rel="stylesheet">
+    <link href="~/content/css/app.a3ddf99b.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-48e2927b.abd9d418.css">
+
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-60c3cfac.abd9d418.css">
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body style="font-size: 36px;">
+<div id="app">
+
+    <div class="login">
+        <div class="top-title">
+            <img width="100" height="100" src="~/content/images/logo00.png">
+            <p>滨州市实验幼儿园信息采集</p>
+        </div>
+        <form id="formSignup">
+            <div class="van-cell-group van-hairline--top-bottom">
+                <div class="van-cell van-field">
+                    <div class="van-field__left-icon"><i class="van-icon van-icon-manager"><!----></i></div>
+                    <div class="van-cell__value van-cell__value--alone">
+                        <div class="van-field__body">
+                            <input type="text" placeholder="请输入手机号" id="phoneNum" name="phoneNum"  class="van-field__control">
+                        </div>
+                    </div>
+                </div>
+                <div class="van-cell van-field">
+                    <div class="van-field__left-icon"><i class="van-icon van-icon-lock"><!----></i></div>
+                    <div class="van-cell__value van-cell__value--alone">
+                        <div class="van-field__body">
+                            <input type="password" placeholder="请设置登录密码" class="van-field__control" name="pwd" id="pwd">
+                            <div class="van-field__right-icon"><i class="van-icon van-icon-eye"><!----></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="van-cell van-field">
+                    <div class="van-field__left-icon"><i class="van-icon van-icon-lock"><!----></i></div>
+                    <div class="van-cell__value van-cell__value--alone">
+                        <div class="van-field__body">
+                            <input type="password" placeholder="请确认登录密码" class="van-field__control" id="rePassword" name="rePassword" >
+                            <div class="van-field__right-icon"><i class="van-icon van-icon-eye"><!----></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="van-cell van-field">
+                    <div class="van-field__left-icon"><i class="van-icon van-icon-photo"><!----></i></div>
+                    <div class="van-cell__value van-cell__value--alone">
+                        <div class="van-field__body">
+                            <input type="text" placeholder="请输入验证码" class="van-field__control" name="regCaptcha" id="regCaptcha" >
+                            <div class="van-field__button" style="display: flex;">
+                                <img src="~/Account/CreateCaptcha" id="imgVerifyCode" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        
+        <div class="login-btn">
+            <button class="van-button van-button--info van-button--normal van-button--block van-button--round" type="submit" id="submit">
+                <span class="van-button__text">立即注册</span>
+            </button><a class="register" style="display: block;" href="/Account/Signin">已有账号，去登录</a>
+        </div>
+        </form>
+    </div>
+
+</div>
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/layer/mobile/layer.js"></script>
+<script type="text/javascript">
+
+    $(function() {
+        $("#imgVerifyCode").click(function() {
+            $("#imgVerifyCode").attr("src", "/Account/CreateCaptcha?t=" + Math.random());
+            });
+        $("#imgVerifyCode").click(); //避免部分浏览器刚打开时加载上次的缓存验证码
+            
+            $("#formSignup").validate({
+                //验证规则
+                rules: {
+                    phoneNum: {
+                        required: true,
+                        //验证是否已存在
+                        remote: {
+                            url: '@Url.Action("Validate", "Account")',
+                            type: "post",
+                            dataType: "json",
+                            data: {
+                                account: function() {
+                                    return $("#phoneNum").val();
+                                }
+                            }
+                        }
+                    },
+                    pwd: {
+                        required: true
+                        //checkPwd: true
+                    },
+                    rePassword: {
+                        required: true,
+                        equalTo: '#pwd'
+                    },
+                    regCaptcha: {
+                        required: true
+                    }
+                },
+                // 验证消息
+                messages: {
+                    phoneNum: {
+                        required: '请输入手机号',
+                        remote: '手机号已被占用'
+                    },
+                    pwd: {
+                        required: '请输入密码'
+                    },
+                    rePassword: {
+                        required: '请输入确认密码',
+                        equalTo: '两次输入密码需一致'
+                    },
+                    regCaptcha: {
+                        required: '请输入验证码'
+                    }
+                },
+
+                // 错误消息提示
+                errorPlacement: function(error, element) {
+                    error.insertAfter(element.parent());
+                },
+                //验证通过后提交事件
+                submitHandler: function(form) {
+                    var formData = $("#formSignup").serializeArray();
+                    var loading = layer.open({
+                        shadeClose: false,
+                        type: 2,
+                        content: '注册中'
+                    });
+                    $.ajax({
+                        url: "@Url.Action("Signup", "Account")",
+                        type: "POST",
+                        dataType: "json",
+                        data: formData,
+                        beforeSend: function() {
+                            $("#btnSignup").attr({ disabled: "disabled" });
+                        },
+                        complete: function() {
+                            layer.close(loading);
+                            $("#btnSignup").attr({ disabled: false });
+                        },
+                        success: function(res) {
+                            if (res.status == "ok") {
+                                layer.open({
+                                    shadeClose: false,
+                                    content: '注册成功，请登录',
+                                    skin: 'msg',
+                                    time: 3, //3秒后自动关闭
+                                    end: function() {
+                                        window.location.href = "@Url.Action("Signin", "Account")";
+                                    }
+                                });
+                                
+                            } else {
+                                layer.open({
+                                    shadeClose: false,
+                                    content: '注册失败：' + res.errorMsg,
+                                    skin: 'msg',
+                                    time: 3, //3秒后自动关闭
+                                    end: function() {
+                                        $("#imgVerifyCode").click();
+                                        $("#regCaptcha").val("");
+                                    }
+                                });
+                                
+                            }
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            layer.open({
+                                shadeClose: false,
+                                content: '网络异常。' + jqXHR.status,
+                                skin: 'msg',
+                                time: 3, //3秒后自动关闭
+                                end: function() {
+                                    $("#imgVerifyCode").click();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+    /*
+
+
+    hui.formInit();
+    hui("#imgVerifyCode").click(function () {
+        hui("#imgVerifyCode").attr("src", "/Home/CreateCaptcha?t=" + Math.random());
+    });
+    hui("#imgVerifyCode").click();//避免部分浏览器刚打开时加载上次的缓存验证码
+
+    hui('#submit').click(function () {
+        //验证
+        var res = huiFormCheck('#form1');
+        //提交
+        if (res) {
+
+            var data = hui.getFormData('#form1');
+            hui.ajax({
+                type: 'POST',
+                url: "/Home/Register",
+                data: data,
+                backType: 'JSON',
+                beforeSend: function () {//请求前执行的函数
+                    hui.loading('正在提交中...');
+                },
+                complete: function () {//请求完成执行的函数，不论成功失败都会执行
+                    hui.closeLoading();
+                },
+                success: function (msg) {//请求成功后执行的回调函数
+                    if (msg.status == "ok") {
+                        hui.iconToast("注册成功，请登录");
+                        setTimeout(function () {
+                            location.replace("/Home/Signin");
+                        }, 2000);
+                    } else {
+                        hui.iconToast(msg.errorMsg, 'error');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    }
+                },
+                error: function (e) {//请求失败时执行的回调函数
+                    hui.iconToast('网络请求失败', 'warn');
+                }
+            });
+        }
+    });
+    */
+</script>
+</body>
+</html>
+

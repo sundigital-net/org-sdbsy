@@ -60,8 +60,8 @@
                         <td class="f-14">
                             <a title="个人详情" href="javascript:;" class="ml-5" onclick="show_teacher('个人详情','/Teacher/Index/@item.Id')" style="text-decoration:none"><i class="Hui-iconfont">&#xe62c;</i></a>
                             @*<a title="教育经历" href="javascript:;" class="ml-5" onclick="show_edu('教育经历','/Educate/List?teacherId=@item.Id')" style="text-decoration:none"><i class="Hui-iconfont">&#xe623;</i></a>*@
-                            <a title="培训经历" href="javascript:;" class="ml-5" onclick="show_tra('培训经历','/Training/List?teacherId=@item.Id')" style="text-decoration:none"><i class="Hui-iconfont">&#xe636;</i></a>
-                            <a title="所获证书" href="javascript:;" class="ml-5" onclick="show_cer('所获证书','/Certificate/List?teacherId=@item.Id')" style="text-decoration:none"><i class="Hui-iconfont">&#xe602;</i></a>
+                            <a title="培训经历" href="javascript:;" class="ml-5" onclick="show_tra('培训经历','/Teacher/TrainingList?teacherId=@item.Id')" style="text-decoration:none"><i class="Hui-iconfont">&#xe636;</i></a>
+                            <a title="所获证书" href="javascript:;" class="ml-5" onclick="show_cer('所获证书','/Teacher/CertificateList?teacherId=@item.Id')" style="text-decoration:none"><i class="Hui-iconfont">&#xe602;</i></a>
 
                             @*<a title="工作经历" href="javascript:;" class="ml-5" onclick="show_work('工作经历','/Work/List?teacherId=@item.Id')" style="text-decoration:none"><i class="Hui-iconfont">&#xe602;</i></a>*@
                             <a title="删除" href="javascript:;" onclick="teacher_del(this,@item.Id)" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
@@ -171,10 +171,10 @@
             layer_show(title,url,w,h)
         }
         /**教师-证书 */
-        function show_cer() {
+        /*function show_cer() {
             layer.msg('开发中，敬请期待', { icon: 1, time: 3000 });
-        }
-        /*function show_cer(title, url, w, h) {
+        }*/
+        function show_cer(title, url, w, h) {
             var index = layer.open({
                 type: 2,
                 content: url,
@@ -183,13 +183,13 @@
                 title: title
             });
             layer.full(index);
-        }*/
+        }
 
         /*教师-培训*/
-        function show_tra() {
+        /*function show_tra() {
             layer.msg('开发中，敬请期待', { icon: 1, time: 3000 });
-        }
-        /*function show_tra(title, url, w, h) {
+        }*/
+        function show_tra(title, url, w, h) {
             var index = layer.open({
                 type: 2,
                 content: url,
@@ -198,7 +198,7 @@
                 title: title
             });
             layer.full(index);
-        }*/
+        }
         /*教师-教育*/
         function show_edu(title, url, w, h) {
             var index = layer.open({

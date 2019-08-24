@@ -1,0 +1,300 @@
+﻿@model AddNewInfoViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en" class="hairlines" style="font-size: 36px;">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="~/favicon.ico">
+    <title>滨州市实验幼儿园信息采集</title>
+    <link href="~/content/css/chunk-3564dafe.db9c52e2.css" rel="prefetch">
+    <link href="~/content/css/chunk-48e2927b.abd9d418.css" rel="prefetch">
+    <link href="~/content/css/chunk-4e387861.12a0c677.css" rel="prefetch">
+    <link href="~/content/css/chunk-60c3cfac.abd9d418.css" rel="prefetch">
+    <link href="~/content/js/chunk-3564dafe.14c97d61.js" rel="prefetch">
+    <link href="~/content/js/chunk-48e2927b.f0a48ea8.js" rel="prefetch">
+    <link href="~/content/js/chunk-4e387861.127193bf.js" rel="prefetch">
+    <link href="~/content/js/chunk-60c3cfac.7ac13b85.js" rel="prefetch">
+    <link href="~/content/css/app.a3ddf99b.css" rel="preload" as="style">
+    <link href="~/content/css/chunk-vendors.7d5f0cf8.css" rel="preload" as="style">
+    <link href="~/content/js/app.e9485b78.js" rel="preload" as="script">
+    <link href="~/content/js/chunk-vendors.e44ea13b.js" rel="preload" as="script">
+    <link href="~/content/css/chunk-vendors.7d5f0cf8.css" rel="stylesheet">
+    <link href="~/content/css/app.a3ddf99b.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-48e2927b.abd9d418.css">
+    <script charset="utf-8" src="~/content/js/chunk-48e2927b.f0a48ea8.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-60c3cfac.abd9d418.css">
+    <script charset="utf-8" src="~/content/js/chunk-60c3cfac.7ac13b85.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-3564dafe.db9c52e2.css">
+    <script charset="utf-8" src="~/content/js/chunk-3564dafe.14c97d61.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-4e387861.12a0c677.css">
+    <script charset="utf-8" src="~/content/js/chunk-4e387861.127193bf.js"></script>
+</head>
+<body style="font-size: 36px;">
+<div id="app">
+<div class="van-tabs van-tabs--line">
+
+<div class="van-tabs__wrap van-hairline--top-bottom">
+    <div role="tablist" class="van-tabs__nav van-tabs__nav--line" style="background: rgb(60, 119, 201);">
+        <div role="tab" aria-selected="true" class="van-tab van-tab--active" style="color: rgb(255, 255, 255);">
+            <span class="van-ellipsis">基础信息</span>
+        </div>
+        <div role="tab" class="van-tab">
+            <span class="van-ellipsis">家庭信息</span>
+        </div>
+        <div role="tab" class="van-tab">
+            <span class="van-ellipsis">其他信息</span>
+        </div>
+        <div class="van-tabs__line" style="width: 60px; transform: translateX(60px) translateX(-50%); height: 5px; border-radius: 5px;"></div>
+    </div>
+</div>
+<div class="van-tabs__content">
+<div role="tabpanel" class="van-tab__pane" style="">
+
+    <div class="van-cell-group van-hairline--top-bottom">
+        <label for="">幼儿姓名</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入幼儿姓名" class="van-field__control">
+                </div>
+            </div>
+        </div>
+        <label for="">性别</label>
+        <div role="radiogroup" class="van-radio-group">
+            <div role="radio" tabindex="0" aria-checked="true" class="van-radio">
+                <div class="van-radio__icon van-radio__icon--round van-radio__icon--checked">
+                    <i class="van-icon van-icon-success"><!----></i>
+                </div><span class="van-radio__label">男</span></div>
+            <div role="radio" tabindex="-1" aria-checked="false" class="women van-radio">
+                <div class="van-radio__icon van-radio__icon--round">
+                    <i class="van-icon van-icon-success"><!----></i>
+                </div><span class="van-radio__label">女</span>
+            </div>
+        </div>
+        <label for="">出生日期</label>
+        <div class="van-cell">
+            <div class="van-cell__value van-cell__value--alone">
+                <span>请选择出生日期</span>
+            </div></div><!---->
+        <label for="">证件类型</label>
+        <div class="van-cell">
+            <div class="van-cell__value van-cell__value--alone">
+                <span>居民身份证</span>
+            </div>
+        </div>
+        <label for="">身份证号</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入身份证号" class="van-field__control">
+                </div>
+            </div>
+        </div>
+        <label for="">血型</label>
+        <div class="van-dropdown-menu van-hairline--top-bottom">
+            <div role="button" tabindex="0" class="van-dropdown-menu__item">
+                <span class="van-dropdown-menu__title van-dropdown-menu__title--down">
+                    <div class="van-ellipsis">A</div>
+                </span>
+            </div>
+            <div class="van-dropdown-item van-dropdown-item--up" style="z-index: 10; bottom: 0px; display: none;"><!---->
+            </div>
+        </div>
+        <label for="">国籍</label>
+        <div class="van-dropdown-menu van-hairline--top-bottom">
+            <div role="button" tabindex="0" class="van-dropdown-menu__item">
+                <span class="van-dropdown-menu__title van-dropdown-menu__title--down">
+                    <div class="van-ellipsis">中国</div></span></div>
+            <div class="van-dropdown-item van-dropdown-item--up" style="z-index: 10; bottom: 0px; display: none;"><!----></div>
+        </div>
+        <label for="">民族</label>
+        <div class="van-dropdown-menu van-hairline--top-bottom">
+            <div role="button" tabindex="0" class="van-dropdown-menu__item">
+                <span class="van-dropdown-menu__title van-dropdown-menu__title--down">
+                    <div class="van-ellipsis">汉族</div></span></div>
+            <div class="van-dropdown-item van-dropdown-item--up" style="z-index: 10; bottom: 0px; display: none;"><!----></div>
+        </div>
+        <label for="">港澳台侨胞</label>
+        <div class="van-dropdown-menu van-hairline--top-bottom">
+            <div role="button" tabindex="0" class="van-dropdown-menu__item">
+                <span class="van-dropdown-menu__title van-dropdown-menu__title--down">
+                    <div class="van-ellipsis">港澳台侨胞</div></span></div>
+            <div class="van-dropdown-item van-dropdown-item--up" style="z-index: 10; bottom: 0px; display: none;"><!----></div></div>
+    </div>
+    <button class="van-button van-button--info van-button--normal van-button--block van-button--round">
+        <span class="van-button__text">确定</span>
+    </button><img width="100%" height="100" src="~/content/images/bottom.7c6b4019.png">
+</div>
+<div role="tabpanel" class="van-tab__pane" style="display: none;">
+    <div class="van-cell-group van-hairline--top-bottom">
+        <label for="">监护人姓名</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入监护人姓名" class="van-field__control">
+                </div>
+            </div>
+
+        </div>
+
+        <label for="">监护人证件类型</label>
+        <div class="van-dropdown-menu van-hairline--top-bottom">
+            <div role="button" tabindex="0" class="van-dropdown-menu__item">
+                <span class="van-dropdown-menu__title">
+                    <div class="van-ellipsis">居民身份证</div>
+                </span>
+            </div>
+            <div class="van-dropdown-item van-dropdown-item--down" style="z-index: 10; top: 0px; display: none;"><!----></div>
+        </div>
+        <label for="">监护人证件号码</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入证件号码" class="van-field__control">
+                </div>
+            </div>
+        </div>
+        <label for="">父亲姓名</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入姓名" class="van-field__control">
+                </div>
+            </div>
+        </div>
+        <label for="">父亲证件类型</label>
+        <div class="van-dropdown-menu van-hairline--top-bottom">
+            <div role="button" tabindex="0" class="van-dropdown-menu__item">
+                <span class="van-dropdown-menu__title">
+                    <div class="van-ellipsis">居民身份证</div>
+                </span>
+            </div>
+            <div class="van-dropdown-item van-dropdown-item--down" style="z-index: 10; top: 0px; display: none;"><!----></div>
+        </div>
+
+        <label for="">父亲证件号码</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入证件号码" class="van-field__control">
+                </div>
+            </div>
+        </div>
+        <label for="">父亲工作单位</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body"><input type="text" placeholder="请输入工作单位" class="van-field__control"></div>
+            </div>
+        </div>
+        <label for="">父亲手机号</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入手机号" class="van-field__control">
+                </div>
+            </div>
+        </div>
+        <label for="">母亲姓名</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body"><input type="text" placeholder="请输入姓名" class="van-field__control"></div>
+            </div>
+        </div>
+        <label for="">母亲证件类型</label>
+        <div class="van-dropdown-menu van-hairline--top-bottom">
+            <div role="button" tabindex="0" class="van-dropdown-menu__item">
+                <span class="van-dropdown-menu__title">
+                    <div class="van-ellipsis">居民身份证</div>
+                </span>
+
+            </div>
+
+            <div class="van-dropdown-item van-dropdown-item--down" style="z-index: 10; top: 0px; display: none;"><!----></div>
+        </div>
+        <label for="">母亲证件号码</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入证件号码" class="van-field__control">
+                </div>
+            </div>
+        </div>
+        <label for="">母亲工作单位</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入工作单位" class="van-field__control">
+                </div>
+            </div>
+        </div>
+        <label for="">母亲手机号</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入手机号" class="van-field__control">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <button class="van-button van-button--info van-button--normal van-button--block van-button--round">
+        <span class="van-button__text">确定</span>
+    </button><img width="100%" height="100" src="~/content/images/bottom.7c6b4019.png">
+</div>
+<div role="tabpanel" class="van-tab__pane" style="display: none;">
+    <div class="van-cell-group van-hairline--top-bottom">
+        <label for="">其他联系方式</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <input type="text" placeholder="请输入联系方式" class="van-field__control">
+                </div>
+            </div>
+        </div>
+        <label for="">幼儿传染病史（请如实填写）</label>
+        <div class="van-cell van-field">
+            <div class="van-cell__value van-cell__value--alone">
+                <div class="van-field__body">
+                    <textarea rows="3" class="van-field__control" style="height: 69px;"></textarea>
+                </div>
+            </div>
+        </div>
+        <label for="">幼儿照片</label>
+        <div class="van-uploader">
+            <div class="van-uploader__wrapper">
+                <div class="van-uploader__upload">
+                    <i class="van-icon van-icon-plus van-uploader__upload-icon"><!----></i>
+                    <input type="file" accept="image/*" class="van-uploader__input">
+                </div>
+            </div>
+        </div>
+        <label for="">幸福一家人</label>
+        <div class="van-uploader">
+            <div class="van-uploader__wrapper">
+                <div class="van-uploader__upload">
+                    <i class="van-icon van-icon-plus van-uploader__upload-icon"><!----></i>
+                    <input type="file" accept="image/*" class="van-uploader__input">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <button class="van-button van-button--info van-button--normal van-button--block van-button--round">
+        <span class="van-button__text">保存</span>
+    </button>
+    <img width="100%" height="100" src="~/content/images/bottom.7c6b4019.png">
+</div>
+</div>
+</div>
+</div>
+
+<script src="~/content/js/chunk-vendors.e44ea13b.js"></script>
+
+</body>
+</html>

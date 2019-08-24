@@ -15,7 +15,7 @@ namespace SDBSY.Service
         {
             CountryDTO dto = new CountryDTO();
             dto.Id = entity.Id;
-            dto.Name = entity.Name;
+            dto.Value = entity.Name;
             return dto;
         }
         public CountryDTO[] GetAll()

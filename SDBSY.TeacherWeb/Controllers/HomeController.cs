@@ -21,5 +21,10 @@ namespace SDBSY.TeacherWeb.Controllers
             admin.UserName = admin.UserName.Replace(substring, "****");
             return View(admin);
         }
+
+        public ActionResult Logout()
+        {
+            return RedirectToAction("Signin", "Account");
+        }
     }
 }

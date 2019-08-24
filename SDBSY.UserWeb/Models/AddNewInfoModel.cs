@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SDBSY.UserWeb.App_Start;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -89,12 +90,12 @@ namespace SDBSY.UserWeb.Models
         [Required(ErrorMessage = "监护人证件号码必填")]
         public string GuardianCardNum { get; set; }
         public string FatherName { get; set; }
-        public long FatherCardTypeId { get; set; }
+        public long? FatherCardTypeId { get; set; }
         public string FatherCardNum { get; set; }
         public string FatherWorkUnit { get; set; }
         public string FatherPhoneNum { get; set; }
         public string MotherName { get; set; }
-        public long MotherCardTypeId { get; set; }
+        public long? MotherCardTypeId { get; set; }
         public string MotherCardNum { get; set; }
         public string MotherWorkUnit { get; set; }
         public string MotherPhoneNum { get; set; }
@@ -106,9 +107,15 @@ namespace SDBSY.UserWeb.Models
         /// 幼儿姓名开户的建设银行卡号
         /// </summary>
         public string BankCardNum { get; set; }
-        [Required(ErrorMessage = "请上传幼儿照片")]
-        public string PhotoUrl { get; set; }
-        [Required(ErrorMessage = "请上传全家福照片")]
-        public string TijianUrl { get; set; }
+
+        //[Display(Name = "幼儿照片")]
+        ////[Required(ErrorMessage = "请选择{0}")]
+        //[ValidateFile]
+        //public HttpPostedFileBase[] PhotoFiles { get; set; }
+
+        //[Display(Name = "全家福")]
+        ////[Required(ErrorMessage = "请选择{0}")]
+        //[ValidateFile]
+        //public HttpPostedFileBase[] TijianFiles { get; set; }
     }
 }

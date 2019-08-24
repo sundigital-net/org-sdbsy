@@ -48,11 +48,12 @@
             </div>
             <div>
                 <label>证书资料</label>
+                <p>温馨提示：ios系统下，请选择调用摄像头直接拍照，不要选择历史图片。</p>
                 <div class="Pu-img" id="Pu-img">
                     @foreach (var pic in Model.CertificatePics)
                     {
                         <a href="javascript:; " class="imgselect">
-                            <img src="@pic.Url">
+                            <img src="@pic.ThumbUrl">
                         </a>
                     }
                     <a href="javascript:;" class="Pu-Add-img">

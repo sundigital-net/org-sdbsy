@@ -1,0 +1,254 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" class="hairlines" style="font-size: 37.5px;">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="/favicon.ico">
+    <title>滨州市实验幼儿园信息采集</title>
+    <link href="~/content/css/chunk-3564dafe.db9c52e2.css" rel="prefetch">
+    <link href="~/content/css/chunk-48e2927b.abd9d418.css" rel="prefetch">
+    <link href="~/content/css/chunk-4e387861.12a0c677.css" rel="prefetch">
+    <link href="~/content/css/chunk-60c3cfac.abd9d418.css" rel="prefetch">
+    <link href="~/content/css/app.a3ddf99b.css" rel="preload" as="style">
+    <link href="~/content/css/chunk-vendors.7d5f0cf8.css" rel="preload" as="style">
+    <link href="~/content/css/chunk-vendors.7d5f0cf8.css" rel="stylesheet">
+    <link href="~/content/css/app.a3ddf99b.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-48e2927b.abd9d418.css">
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body style="font-size: 36px;">
+    <div id="app">
+        <div class="login">
+            <div class="top-title">
+                <img width="100" height="100" src="~/content/images/logo00.png">
+                <p>滨州市实验幼儿园信息采集</p>
+            </div>
+            <form id="formLogin">
+                <div class="van-cell-group van-hairline--top-bottom">
+                    <div class="van-cell van-field">
+                        <div class="van-field__left-icon">
+                            <i class="van-icon van-icon-manager"><!----></i>
+                        </div>
+                        <div class="van-cell__value van-cell__value--alone">
+
+                            <div class="van-field__body">
+                                <input type="text" placeholder="请输入手机号" class="van-field__control" id="phoneNum" name="phoneNum" checkType="phone" checkMsg="填写正确的手机号">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="van-cell van-field">
+
+                        <div class="van-field__left-icon"><i class="van-icon van-icon-lock"><!----></i></div>
+                        <div class="van-cell__value van-cell__value--alone">
+                            <div class="van-field__body">
+                                <input type="password" placeholder="请输入密码" class="van-field__control" name="pwd" checkType="string" id="pwd" checkData="8,30" checkMsg="密码为8-30个字符">
+                                <div class="van-field__right-icon">
+                                    <i class="van-icon van-icon-eye"><!----></i>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="van-cell van-field">
+
+                        <div class="van-field__left-icon"><i class="van-icon van-icon-photo"><!----></i></div>
+                        <div class="van-cell__value van-cell__value--alone">
+                            <div class="van-field__body">
+                                <input type="text" placeholder="请输入验证码" class="van-field__control" id="loginCaptcha" name="loginCaptcha" value="" checkType="reg" checkData="^[A-Za-z0-9]{4}$" checkMsg="验证码为4个字符">
+                                <div class="van-field__button" style="display: flex;">
+
+                                    <img src="~/Account/CreateCaptcha" id="imgVerifyCode" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="register" style="float: left;margin-top: 0" href="/Account/Signup">没有账号，去注册</a>
+                    <a class="forget" href="/Account/LosePass">忘记密码</a>
+                </div>
+
+                <div class="login-btn">
+                    <button class="van-button van-button--info van-button--normal van-button--block van-button--round" type="submit" id="btnLogin">
+                        <span class="van-button__text">登录</span>
+                    </button>
+                    <!--<a class="register" style="display: block;" href="/Home/Register">没有账号，去注册</a>-->
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/layer/mobile/layer.js"></script>
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+            
+            $("#imgVerifyCode").click(function () {
+                $("#imgVerifyCode").attr("src", "/Account/CreateCaptcha?t=" + Math.random());
+            });
+            $("#imgVerifyCode").click();//避免部分浏览器刚打开时加载上次的缓存验证码
+
+            $("#formLogin").validate({
+                //验证规则
+                rules: {
+                    phoneNum: {
+                        required: true
+                    },
+                    pwd: {
+                        required: true
+                    },
+                    loginCaptcha: {
+                        required: true
+                    }
+                },
+                // 验证消息
+                messages: {
+                    phoneNum: {
+                        required: '请输入手机号'
+                    },
+                    pwd: {
+                        required: '请输入密码'
+                    },
+                    loginCaptcha: {
+                        required: '请输入验证码'
+                    }
+                },
+
+                // 错误消息提示
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.parent());
+                },
+                //验证通过后提交事件
+                submitHandler: function (form) {
+                    var formData = $("#formLogin").serializeArray();
+                    var loading = layer.open({
+                        shadeClose: false,
+                        type: 2,
+                        content: '登录中'
+                    });
+                    $.ajax({
+                        url: "/Account/Signin",
+                        type: "POST",
+                        dataType: "json",
+                        data: formData,
+                        beforeSend: function () {
+                            $("#btnLogin").attr({disabled:"disabled"});
+                            
+                        },
+                        complete: function() {
+                            layer.close(loading);
+                            $("#btnLogin").attr({ disabled: false });
+                        },
+                        success: function (res) {
+                            if (res.status === "ok") {
+                                layer.open({
+                                    shadeClose: false,
+                                    content: '登录成功,正在跳转...',
+                                    skin: 'msg',
+                                    time: 3, //3秒后自动关闭
+                                    end: function() {
+                                        window.location.href = "@Url.Action("Index","Home")";
+                                    }
+                                });
+                                
+                            } else {
+                                layer.open({
+                                    shadeClose: false,
+                                    content: '登录失败：'+res.errorMsg,
+                                    skin: 'msg',
+                                    time: 3,//3秒后自动关闭
+                                    end: function() {
+                                        $("#imgVerifyCode").click();
+                                        $("#loginCaptcha").val("");
+                                    }
+                                });
+                                
+                            }
+                            
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            layer.open({
+                                shadeClose: false,
+                                content: '网络异常。'+jqXHR.status,
+                                skin: 'msg',
+                                time: 3, //3秒后自动关闭
+                                end: function() {
+                                    $("#imgVerifyCode").click();
+                                }
+                            });
+                            
+                        }
+                    });
+                }
+            });
+            
+        });
+
+
+
+    /*
+
+
+
+
+        
+    hui("#imgVerifyCode").click(function () {
+        hui("#imgVerifyCode").attr("src", "/Home/CreateCaptcha?t=" + Math.random());
+    });
+    hui("#imgVerifyCode").click();//避免部分浏览器刚打开时加载上次的缓存验证码
+
+    hui('#submit').click(function () {
+        //验证
+        var res = huiFormCheck('#form1');
+        //提交
+        if (res) {
+            //hui.iconToast('验证通过！');
+            var data = hui.getFormData('#form1');
+            hui.ajax({
+                type: 'POST',
+                url: "/Home/Signin",
+                data: data,
+                backType: 'JSON',
+                beforeSend: function () {//请求前执行的函数
+                    hui.loading("正在登录中...");
+                },
+                complete: function () {//请求完成执行的函数，不论成功失败都会执行
+                    hui.closeLoading();
+                },
+                success: function (res) {//请求成功后执行的回调函数
+                    if (res.status == "ok") {
+                        hui.toast("登录成功", 'long');
+                        setTimeout(function () {
+                            location.replace("/Home/Main");
+                        }, 2000);
+
+                    } else {
+                        hui.toast(res.errorMsg, 'long');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    }
+                },
+                error: function (e) {//请求失败时执行的回调函数
+                    hui.iconToast('网络请求失败', 'warn');
+                }
+            });
+        }
+    });
+
+*/
+</script>
+</body>
+</html>
+

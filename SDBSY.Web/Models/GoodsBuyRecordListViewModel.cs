@@ -10,7 +10,7 @@ namespace SDBSY.Web.Models
     {
         public long GoodsId { get; set; }
         public GoodsDTO[] Goods { get; set; }
-        public GoodsAllRecordDTO[] Records { get; set; }
+        public GoodsBuyRecordDTO[] Records { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
     }

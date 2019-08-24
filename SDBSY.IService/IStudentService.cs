@@ -26,5 +26,6 @@ namespace SDBSY.IService
         void ShenHe(long id,bool pass);//审核
         StudentDTO[] GetById(long[] selectIds);
         GoUpRecordDTO[] GetGoUpRecords(long stuId);
+        void UpdateImg(long stuId, string url, bool type);
     }
 }

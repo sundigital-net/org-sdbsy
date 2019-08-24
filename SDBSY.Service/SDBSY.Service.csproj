@@ -73,6 +73,7 @@
     <Compile Include="Configs\GoodsApplyRecordConfig.cs" />
     <Compile Include="Configs\GoodsBuyRecordConfig.cs" />
     <Compile Include="Configs\GoodsConfig.cs" />
+    <Compile Include="Configs\GoodsTypeConfig.cs" />
     <Compile Include="Configs\GoUpRecordConfig.cs" />
     <Compile Include="Configs\InvoiceConfig.cs" />
     <Compile Include="Configs\InvoicePicConfig.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Entities\GoodsApplyRecordEntity.cs" />
     <Compile Include="Entities\GoodsBuyRecordEntity.cs" />
     <Compile Include="Entities\GoodsEntity.cs" />
+    <Compile Include="Entities\GoodsTypeEntity.cs" />
     <Compile Include="Entities\InvoiceEntity.cs" />
     <Compile Include="Entities\InvoicePicEntity.cs" />
     <Compile Include="Entities\TrainingEntity.cs" />

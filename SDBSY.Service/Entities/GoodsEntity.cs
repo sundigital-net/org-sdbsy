@@ -28,6 +28,8 @@ namespace SDBSY.Service.Entities
 {
     public class GoodsEntity:BaseEntity
     {
+        public long GoodsTypeId { get; set; }
+        public virtual GoodsTypeEntity GoodsType { get; set; }
         public string Name { get; set; }//名称
         public string Unit { get; set; }//计量单位
         public string Format { get; set; }//规格

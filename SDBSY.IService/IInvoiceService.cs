@@ -19,7 +19,7 @@ namespace SDBSY.IService
         InvoiceDTO GetById(long id);
         InvoiceDTO[] GetByTeacherId(long teacherId);
         InvoiceDTO[] GetByClassId(long classId);
-        InvoiceDTO[] GetAll();
+        InvoiceDTO[] GetAll(long? classId, DateTime? startTime, DateTime? endTime);
         InvoiceDTO[] GetAll(long[] ids);
         void DeletePics(long invoiceId);
     }

@@ -92,8 +92,7 @@ namespace SDBSY.Web.Controllers
             {
                 return Json(new AjaxResult { Status = "Error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
             }
-            roleSvc.Update(model.Id, model.Name);
-            permSvc.UpdatePermIds(model.Id, model.PermissionIds);
+            roleSvc.UpdateRoleIds(model.Id, model.RoleIds);
             return Json(new AjaxResult { Status = "ok" });
         }
         [HttpPost]

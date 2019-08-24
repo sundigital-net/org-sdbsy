@@ -1,0 +1,150 @@
+﻿@model ApplyRecordAddViewModel
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <title>添加物品申领</title>
+    <link href="~/content/fonts/iconfont.css" rel="stylesheet" />
+    <link href="~/content/css/bass.css" rel="stylesheet" />
+    <link href="~/content/css/index.css" rel="stylesheet" />
+    <link href="~/content/css/mobileSelect.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <header>
+            <div class="header">
+                <h1>添加物品申领</h1>
+                <a href="javascript:window.history.back(-1)" class="return"><i class="icon-16"></i></a>
+            </div>
+        </header>
+        <div style="height: 2.5rem;"></div>
+    </div>
+    <!--新增信息-->
+    <div class="purchase c-Publish">
+        <form class="input-group" id="formAdd">
+            <input type="hidden" name="teacherId" value="@Model.TeacherId" />
+            <div class="input-row">
+                <label>物品名称</label>
+                <input type="text" readonly="readonly" id="GoodsName" placeholder="请选择">
+                <input type="hidden" readonly="readonly" id="GoodsId" name="GoodsId">
+            </div>
+
+            <div class="input-row">
+                <label>申请数量</label>
+                <input type="text" placeholder="请输入申请数量" name="amount" required>
+            </div>
+            <div class="input-row">
+                <label>使用班级</label>
+                <input type="text" readonly="readonly" id="ClassName" placeholder="请选择">
+                <input type="hidden" readonly="readonly" id="ClassId" name="ClassId">
+            </div>
+            
+            <button type="submit" id="btnAdd">保存</button>
+        </form>
+    </div>
+    <script src="~/content/js/jquery.min.js"></script>
+    <script src="~/content/js/jquery.validate.min.js"></script>
+    <script src="~/content/layer/mobile/layer.js"></script>
+<script src="~/content/js/mobileSelect.js"></script>
+    <script>
+    $(document).ready(function () {
+
+        $("#formAdd").validate({
+            //验证通过后执行的方法
+            submitHandler: function() {
+                //var formData = $("#formAdd").serializeArray();
+                var formData = new FormData(document.getElementById("formAdd"));
+                var loading = layer.open({
+                    shadeClose: false,
+                    type: 2,
+                    content: '保存中'
+                });
+                $.ajax({
+                    url: '@Url.Action("Add","GoodsApplyRecord")',
+                    type: 'post',
+                    dataType: 'json',
+                    data: formData,
+                    contentType: false,//必须false才能加上正确的contentType
+                    processData: false,//必须false才能避开jq对formdata的默认处理
+                    beforeSend: function () {
+                        $("#btnAdd").attr({disabled:"disabled"});
+                    },
+                    complete: function() {
+                        layer.close(loading);
+                        $("#btnAdd").attr({ disabled: false });
+                    },
+                    success: function(res) {
+                        if (res.status == "ok") {
+                            layer.open({
+                                shadeClose: false,
+                                content: '保存成功',
+                                skin: 'msg',
+                                time: 3, //3秒后自动关闭
+                                end: function() {
+                                    window.location.href = "@Url.Action("List","GoodsApplyRecord")";
+                                }
+                            });
+
+                        }
+                        else {
+                            layer.open({
+                                shadeClose: false,
+                                content: '保存失败：'+res.errorMsg,
+                                skin: 'msg',
+                                time: 3 //3秒后自动关闭
+                            });
+                        }
+                    },
+                    error: function() {
+                        layer.open({
+                            shadeClose: false,
+                            content: '网络异常,请联系管理员',
+                            skin: 'msg',
+                            time: 3 //3秒后自动关闭
+                        });
+                    }
+                });
+            }
+        });
+    });
+    //物品
+    var goods = new MobileSelect({
+        trigger: "#GoodsName",
+        title: "物品",
+        wheels: [
+            { data: @Html.Raw(Model.Goods)}
+        ],
+        transitionEnd:function(indexArr, data){
+            //console.log(data);
+        },
+        callback:function(indexArr, data){
+            //console.log(data);
+            $("#GoodsName").val(data[0].value);
+            $("#GoodsId").val(data[0].id);
+        }
+        });
+    //班级
+    var classes = new MobileSelect({
+        trigger: "#ClassName",
+        title: "班级",
+        wheels: [
+            { data: @Html.Raw(Model.Classes)}
+        ],
+        transitionEnd:function(indexArr, data){
+            //console.log(data);
+        },
+        callback:function(indexArr, data){
+            //console.log(data);
+            $("#ClassName").val(data[0].value);
+            $("#ClassId").val(data[0].id);
+        }
+    });
+    </script>
+</body>
+</html>

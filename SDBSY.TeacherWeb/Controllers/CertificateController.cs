@@ -63,7 +63,7 @@ namespace SDBSY.TeacherWeb.Controllers
             //保存证书信息
             long id = teacherSvc.AddNew(Todto(model));
             //保存图片
-            if (model.UpFiles.Length > 0)
+            if (model.UpFiles.Length > 0&&model.UpFiles[0]!=null)
             {
                 for (int i = 0; i < model.UpFiles.Length; i++)
                 {
@@ -73,8 +73,10 @@ namespace SDBSY.TeacherWeb.Controllers
                         var result = await SaveImgAsync(file);
                         if (result.Status == "ok")
                         {
-                            var url = result.Data.ToString();
-                            long picId = teacherSvc.AddNew(id, url, string.Empty);
+                            var data = Convert.ToString(result.Data).Split('|');
+                            var filePath = serverUrl + data[0];
+                            var thumbPath = serverUrl + data[1];
+                            long picId = teacherSvc.AddNew(id, filePath, thumbPath);
                         }
                         else
                         {
@@ -110,8 +112,7 @@ namespace SDBSY.TeacherWeb.Controllers
                 {
                     //请求成功
                     var result = (AjaxResult)Newtonsoft.Json.JsonConvert.DeserializeObject(msgBody, typeof(AjaxResult));
-                    result.Data = serverUrl + result.Data;
-                    result.Status = "ok";
+                    
                     return result;
                 }
                 else
@@ -156,7 +157,7 @@ namespace SDBSY.TeacherWeb.Controllers
             }
 
             teacherSvc.Update(Todto(model));
-            if (model.UpFiles.Length > 0)
+            if (model.UpFiles.Length > 0&&model.UpFiles[0]!=null)
             {
                 //1.清除原来的图片
                 teacherSvc.DelPics(model.Id);
@@ -169,8 +170,10 @@ namespace SDBSY.TeacherWeb.Controllers
                         var result = await SaveImgAsync(file);
                         if (result.Status == "ok")
                         {
-                            var url = result.Data.ToString();
-                            long picId = teacherSvc.AddNew(model.Id, url, string.Empty);
+                            var data = Convert.ToString(result.Data).Split('|');
+                            var filePath = serverUrl + data[0];
+                            var thumbPath = serverUrl + data[1];
+                            long picId = teacherSvc.AddNew(model.Id, filePath, thumbPath);
                         }
                         else
                         {

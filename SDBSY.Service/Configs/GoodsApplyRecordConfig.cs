@@ -33,8 +33,9 @@ namespace SDBSY.Service.Configs
         public GoodsApplyRecordConfig()
         {
             ToTable("T_GoodsApplyRecords");
-            HasRequired(t=>t.Goods).WithMany().HasForeignKey(t=>t.GoodsId).WillCascadeOnDelete(false);
+            HasRequired(t=>t.Goods).WithMany(t=>t.GoodsApplyRecords).HasForeignKey(t=>t.GoodsId).WillCascadeOnDelete(false);
             HasRequired(t=>t.Class).WithMany().HasForeignKey(t=>t.ClassId).WillCascadeOnDelete(false);
+            HasRequired(t=>t.Teacher).WithMany(t=>t.GoodsApplyRecords).HasForeignKey(t=>t.TeacherId).WillCascadeOnDelete(false);
         }
     }
 }

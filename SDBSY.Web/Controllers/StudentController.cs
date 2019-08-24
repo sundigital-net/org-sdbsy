@@ -97,7 +97,7 @@ namespace SDBSY.Web.Controllers
             var bloodTypes = dataSvc.GetByName("BloodType");//血型
             var countries = couSvc.GetAll();//国籍
             var nations = nationSvc.GetAll().ToList();//民族
-            nations.Insert(0, new NationDTO { Name = "请选择" });
+            nations.Insert(0, new NationDTO { Value = "请选择" });
 
             var identities = dataSvc.GetByName("Identity");//港澳台侨外
             //var places = placeSvc.GetAll().ToList();//地市代码
@@ -145,7 +145,7 @@ namespace SDBSY.Web.Controllers
             var bloodTypes = dataSvc.GetByName("BloodType");//血型
             var countries = couSvc.GetAll();//国籍
             var nations = nationSvc.GetAll().ToList();//民族
-            nations.Insert(0, new NationDTO { Name = "请选择" });
+            nations.Insert(0, new NationDTO { Value = "请选择" });
 
             var identities = dataSvc.GetByName("Identity");//港澳台侨外
             //var places = placeSvc.GetAll().ToList();//地市代码

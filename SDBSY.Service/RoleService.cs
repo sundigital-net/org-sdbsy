@@ -30,27 +30,7 @@ namespace SDBSY.Service
                 return role.Id;
             }
         }
-
-        public void AddRoleIds(long adminUserId, long[] roleIds)
-        {
-            using (MyDBContext ctx = new MyDBContext())
-            {
-                BaseService<AdminUserEntity> userBS
-                    = new BaseService<AdminUserEntity>(ctx);
-                var user = userBS.GetById(adminUserId);
-                if (user == null)
-                {
-                    throw new ArgumentException("用户不存在" + adminUserId);
-                }
-                BaseService<RoleEntity> roleBS = new BaseService<RoleEntity>(ctx);
-                var roles = roleBS.GetAll().Where(r => roleIds.Contains(r.Id)).ToArray();
-                foreach (var role in roles)
-                {
-                    user.Roles.Add(role);
-                }
-                ctx.SaveChanges();
-            }
-        }
+        
         private RoleDTO ToDTO(RoleEntity en)
         {
             RoleDTO dto = new RoleDTO();

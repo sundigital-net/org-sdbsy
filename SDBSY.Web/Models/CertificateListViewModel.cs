@@ -8,7 +8,7 @@ namespace SDBSY.Web.Models
 {
     public class CertificateListViewModel
     {
-        public long EducateId { get; set; }
         public CertificateDTO[] Certificates { get; set; }
+        public CertificatePicDTO[] CertificatePics { get; set; }
     }
 }

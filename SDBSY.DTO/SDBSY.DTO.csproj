@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="AdminLogDTO.cs" />
     <Compile Include="AdminUserDTO.cs" />
-    <Compile Include="ApplyRecordPicAddNewDTO.cs" />
+    <Compile Include="GoodsApplyRecordAddNewDTO.cs" />
     <Compile Include="BaseDTO.cs" />
     <Compile Include="CertificateAddNewDTO.cs" />
     <Compile Include="CertificateEditDTO.cs" />
@@ -64,6 +64,7 @@
     <Compile Include="GoodsApplyRecordDTO.cs" />
     <Compile Include="GoodsBuyRecordDTO.cs" />
     <Compile Include="GoodsDTO.cs" />
+    <Compile Include="GoodsTypeDTO.cs" />
     <Compile Include="GoUpRecordDTO.cs" />
     <Compile Include="GuardianDTO.cs" />
     <Compile Include="InvoiceAddNewDTO.cs" />

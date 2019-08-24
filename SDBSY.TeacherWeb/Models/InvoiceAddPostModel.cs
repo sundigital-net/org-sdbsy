@@ -16,9 +16,11 @@ namespace SDBSY.TeacherWeb.Models
         [Display(Name = "购买时间")]
         [Required(ErrorMessage = "请输入{0}")]
         public DateTime BuyDateTime { get; set; }
+
+        public bool IsHouQin { get; set; }
+
         [Display(Name = "购买班级")]
-        [Required(ErrorMessage = "请选择{0}")]
-        public long ClassId { get; set; }
+        public long? ClassId { get; set; }
         [Display(Name = "总金额")]
         [Required(ErrorMessage = "请输入{0}")]
         public decimal Total { get; set; }

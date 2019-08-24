@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace SDBSY.DTO
 {
-    public class GoodsAllApplyRecordDTO:BaseDTO
+    public class GoodsApplyRecordDTO:BaseDTO
     {
         public long GoodsId { get; set; }
         public string GoodsName { get; set; }
@@ -34,8 +34,9 @@ namespace SDBSY.DTO
         public string ClassName { get; set; }
         public long TeacherId { get; set; }
         public string TeacherName { get; set; }
-        public decimal Amount { get; set; }//数量
+        public int Amount { get; set; }//数量
         public int Status { get; set; }//审核状态
+        public string StatusStr { get; set; }
         public string NoPassReason { get; set; }//审核不通过原因
         public DateTime? ApplyTime { get; set; }//领取时间
         public DateTime? ReturnTime { get; set; }//归还时间

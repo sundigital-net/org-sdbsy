@@ -1,0 +1,58 @@
+﻿@model UserDTO
+
+@{
+    Layout = null;
+}
+<html lang="en" class="hairlines" style="font-size: 36px;">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="~/favicon.ico">
+    <title>滨州市实验幼儿园信息采集</title>
+    <link href="~/content/css/chunk-3564dafe.db9c52e2.css" rel="prefetch">
+    <link href="~/content/css/chunk-48e2927b.abd9d418.css" rel="prefetch">
+    <link href="~/content/css/chunk-4e387861.12a0c677.css" rel="prefetch">
+    <link href="~/content/css/chunk-60c3cfac.abd9d418.css" rel="prefetch">
+
+    <link href="~/content/css/app.a3ddf99b.css" rel="preload" as="style">
+    <link href="~/content/css/chunk-vendors.7d5f0cf8.css" rel="preload" as="style">
+    <link href="~/content/css/chunk-vendors.7d5f0cf8.css" rel="stylesheet">
+    <link href="~/content/css/app.a3ddf99b.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-48e2927b.abd9d418.css">
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-60c3cfac.abd9d418.css">
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-3564dafe.db9c52e2.css">
+</head>
+<body style="font-size: 36px;">
+    <div id="app">
+
+        <div data-v-585ccf7e="" class="login">
+            <div data-v-585ccf7e="" class="top-title">
+                <div data-v-585ccf7e="" class="title-wrap">
+                    <img data-v-585ccf7e="" width="50" height="50" src="~/content/images/logo00.png">
+                    <span data-v-585ccf7e="">滨州市实验幼儿园信息采集</span>
+                </div>
+                <p data-v-585ccf7e="" class="phone">@Model.PhoneNum</p>
+            </div>
+            <div data-v-585ccf7e="" class="login-btn">
+                <button data-v-585ccf7e="" class="van-button van-button--info van-button--normal van-button--block van-button--round" id="childrenList">
+                    <span data-v-585ccf7e="" class="van-button__text">幼儿信息采集</span>
+                </button>
+                <button data-v-585ccf7e="" class="show-info van-button van-button--info van-button--normal van-button--block van-button--round" id="quit">
+                    <span data-v-585ccf7e="" class="van-button__text">退出登录</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script type="text/javascript">
+        $("#childrenList").click(function() {
+            window.location.href="/Student/List/"+@Model.Id;
+        });
+        $("#quit").click(function() {
+            window.location.href="/Account/Signout/";
+        });
+    </script>
+</body>
+</html>

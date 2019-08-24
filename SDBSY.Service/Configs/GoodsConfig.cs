@@ -33,6 +33,7 @@ namespace SDBSY.Service.Configs
         public GoodsConfig()
         {
             ToTable("T_Goods");
+            HasRequired(t=>t.GoodsType).WithMany().HasForeignKey(t=>t.GoodsTypeId).WillCascadeOnDelete(false);
         }
     }
 }

@@ -30,7 +30,8 @@ namespace SDBSY.Service.Entities
     {
         public long TeacherId { get; set; }//购买人
         public virtual TeacherEntity Teacher { get; set; }
-        public long ClassId { get; set; }
+        public bool IsHouQin { get; set; }
+        public long? ClassId { get; set; }
         public virtual DataDictionaryEntity Class { get; set; }
         public string GoodsName { get; set; }//物品名称
         public DateTime BuyDateTime { get; set; }//购买日期

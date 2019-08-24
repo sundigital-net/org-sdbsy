@@ -220,5 +220,29 @@ namespace SDBSY.Web.Controllers
             var teachers = teacherSvc.GetById(ids);
             return teachers;
         }
+
+        public ActionResult TrainingList(long teacherId)
+        {
+            var trainings = teacherSvc.GetTrainings(teacherId);
+            return View(trainings);
+        }
+
+        public ActionResult CertificateList(long teacherId)
+        {
+            var cers = teacherSvc.GetCertificates(teacherId);
+            var pics = teacherSvc.GetPics();
+            var model=new CertificateListViewModel()
+            {
+                CertificatePics = pics,
+                Certificates = cers
+            };
+            return View(model);
+        }
+
+        public ActionResult CertificatePicList(long certificateId)
+        {
+            var pics = teacherSvc.GetPics(certificateId);
+            return View(pics);
+        }
     }
 }

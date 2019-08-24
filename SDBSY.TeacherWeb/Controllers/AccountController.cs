@@ -17,6 +17,7 @@ namespace SDBSY.TeacherWeb.Controllers
         [HttpGet]
         public ActionResult Signin()
         {
+            Session.Abandon();
             //long id = adminSvc.AddNew("15376261308", "123456", 2);
             //return Content(id.ToString());
             return View();
@@ -60,6 +61,11 @@ namespace SDBSY.TeacherWeb.Controllers
             if (!ModelState.IsValid)
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
+            }
+            //密码复杂度验证
+            if (!CommonHelper.CheckPwd(model.Password))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "密码长度为8-30，必须包括数字、字母以及字符。" });
             }
             //验证码
             var loginChatcha = (string)TempData["Captcha"];
@@ -187,6 +193,11 @@ namespace SDBSY.TeacherWeb.Controllers
             if (newPwd != reNewPwd)
             {
                 return Json(new AjaxResult() {Status = "error", ErrorMsg = "两次输入的密码不一致"});
+            }
+            //密码复杂度验证
+            if (!CommonHelper.CheckPwd(newPwd))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "密码长度为8-30，必须包括数字、字母以及字符。" });
             }
             var user = adminSvc.GetByUserName(phoneNum);
             if (user == null)

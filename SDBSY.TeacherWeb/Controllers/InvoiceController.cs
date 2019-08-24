@@ -11,6 +11,7 @@ using SDBSY.IService;
 using SDBSY.TeacherWeb.App_Start;
 using SDBSY.TeacherWeb.Models;
 using log4net;
+using System.Transactions;
 
 namespace SDBSY.TeacherWeb.Controllers
 {
@@ -30,7 +31,7 @@ namespace SDBSY.TeacherWeb.Controllers
             var teacher = teacherSvc.GetByAdminId(id);
             if (teacher == null)
             {
-                return View("Error", (object)"请先添加ddsjfj教师信息");
+                return View("Error", (object)"请先添加教师信息");
             }
 
             var classes = dataSvc.GetByName("ClassType");
@@ -38,82 +39,100 @@ namespace SDBSY.TeacherWeb.Controllers
             {
                 TeacherId = teacher.Id,
                 TeacherName = teacher.Name,
-                Classes= JsonConvert.SerializeObject(classes, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() }),
+                Classes = JsonConvert.SerializeObject(classes, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() }),
             };
             return View(model);
         }
 
         [HttpPost]
-        public async System.Threading.Tasks.Task<ActionResult> Add(InvoiceAddPostModel  model)
+        public async System.Threading.Tasks.Task<ActionResult> Add(InvoiceAddPostModel model)
         {
-            
+
             if (!ModelState.IsValid)
             {
-                return Json(new AjaxResult() { Status = "error",ErrorMsg = MVCHelper.GetValidMsg(ModelState)});
+                return Json(new AjaxResult() { Status = "error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
             }
-            //1.保存信息
-            var dto = new InvoiceAddNewDTO()
+            using (var tran = new TransactionScope())//事务开启
             {
-                ClassId=model.ClassId,
-                Detail = model.Detail,
-                GoodsName = model.GoodsName,
-                TeacherId = model.TeacherId,
-                Total = model.Total,
-                BuyDateTime = model.BuyDateTime
-            };
-            long id= invoiceSvc.AddNew(dto);
-            //2.保存图片
-            if (model.UpFiles.Length > 0)
-            {
-                for (int i = 0; i < model.UpFiles.Length; i++)
+                try
                 {
-                    HttpPostedFileBase file = model.UpFiles[i];//这个对象是用来接收文件,利用这个对象可以获取文件的name path等
-                    try
+                    //1.保存信息
+                    var dto = new InvoiceAddNewDTO()
                     {
-                        //log.Debug("保存图片开始-------");
-                        var result= await SaveImgAsync(file);
-                        if (result.Status == "ok")
+                        IsHouQin = model.IsHouQin,
+                        ClassId = model.ClassId,
+                        Detail = model.Detail,
+                        GoodsName = model.GoodsName,
+                        TeacherId = model.TeacherId,
+                        Total = model.Total,
+                        BuyDateTime = model.BuyDateTime
+                    };
+                    long id = invoiceSvc.AddNew(dto);
+                    //2.保存图片
+                    if (model.UpFiles.Length > 0&&model.UpFiles[0]!=null)
+                    {
+                        for (int i = 0; i < model.UpFiles.Length; i++)
                         {
-                            var dto1 = new InvoicePicAddNewDTO()
+                            HttpPostedFileBase file = model.UpFiles[i];//这个对象是用来接收文件,利用这个对象可以获取文件的name path等
+                            try
                             {
-                                InvocieId = id,
-                                Url = result.Data.ToString()
-                            };
-                            long picId = invoiceSvc.AddNewPic(dto1);
-                            //log.Debug("保存图片成功-------");
-                        }
-                        else
-                        {
-                            //log.Debug("保存图片失败-------");
-                            return Json(new AjaxResult() { Status = "error", ErrorMsg = result.Data.ToString() });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
+                                //log.Debug("保存图片开始-------");
+                                var result = await SaveImgAsync(file);
+                                if (result.Status == "ok")
+                                {
+                                    var data = Convert.ToString(result.Data).Split('|');
+                                    var filePath = serverUrl + data[0];
+                                    var thumbPath = serverUrl + data[1];
+                                    var dto1 = new InvoicePicAddNewDTO()
+                                    {
+                                        InvocieId = id,
+                                        Url = filePath,
+                                        ThumbUrl = thumbPath
 
-                        log.Debug("图片保存出错："+ex.Message);
-                        return Json(new AjaxResult() { Status = "error", ErrorMsg = ex.Message });
+                                    };
+                                    long picId = invoiceSvc.AddNewPic(dto1);
+                                    //log.Debug("保存图片成功-------");
+                                }
+                                else
+                                {
+                                    //log.Debug("保存图片失败-------");
+                                    return Json(new AjaxResult() { Status = "error", ErrorMsg = result.Data.ToString() });
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+
+                                log.Debug("图片保存出错：" + ex.Message);
+                                return Json(new AjaxResult() { Status = "error", ErrorMsg = ex.Message });
+                            }
+                        }
+
                     }
+                    tran.Complete();
+                    return Json(new AjaxResult() { Status = "ok" });
                 }
-                
+                catch (Exception ex)
+                {
+                    return Json(new AjaxResult { Status = "error", ErrorMsg = ex.Message });
+                }
             }
-            return Json(new AjaxResult() {Status = "ok"});
+            
         }
 
         private async System.Threading.Tasks.Task<AjaxResult> SaveImgAsync(HttpPostedFileBase file)
         {
-            var uri=serverUrl + "/Home/FileUpload/";
+            var uri = serverUrl + "/Home/FileUpload/";
             Guid guid = Guid.NewGuid();
-            using (var handler = new HttpClientHandler(){AutomaticDecompression = DecompressionMethods.None})
+            using (var handler = new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.None })
             using (HttpClient httpClient = new HttpClient(handler))
             {
 
                 log.Debug("old-URI:" + httpClient.BaseAddress);
                 log.Debug("serverUrl:" + serverUrl);
                 log.Debug("string-URI:" + uri);
-                httpClient.BaseAddress=new Uri(uri);
+                httpClient.BaseAddress = new Uri(uri);
                 //日志
-                log.Debug("new-URI:"+httpClient.BaseAddress);
+                log.Debug("new-URI:" + httpClient.BaseAddress);
                 //Bitmap bitmap = new Bitmap(memoryStream);
                 MultipartFormDataContent content = new MultipartFormDataContent();
                 content.Headers.Add("uid", "sdbsy");//增加账号密码，防止恶意上传
@@ -129,14 +148,13 @@ namespace SDBSY.TeacherWeb.Controllers
                     log.Debug("开始获取服务器结果成功！！！！！");
                     //请求成功
                     var result = (AjaxResult)Newtonsoft.Json.JsonConvert.DeserializeObject(msgBody, typeof(AjaxResult));
-                    result.Data = serverUrl + result.Data;
-                    result.Status = "ok";
+
                     return result;
                 }
                 else
                 {
                     log.Debug("开始获取服务器结果失败！！！！！");
-                    return new AjaxResult { Status = "error",ErrorMsg = msgBody};
+                    return new AjaxResult { Status = "error", ErrorMsg = msgBody };
                 }
 
             }
@@ -170,9 +188,9 @@ namespace SDBSY.TeacherWeb.Controllers
             };
             long picId = invoiceSvc.AddNewPic(dto);
         }*/
-        
 
-        
+
+
         public ActionResult List()
         {
             var id = (long)AdminHelper.GetUserId(HttpContext);
@@ -182,9 +200,9 @@ namespace SDBSY.TeacherWeb.Controllers
                 return View("Error", (object)"请先添加教师信息");
             }
 
-            var invoices= invoiceSvc.GetByTeacherId(teacher.Id);
+            var invoices = invoiceSvc.GetByTeacherId(teacher.Id);
             var invoicePics = invoiceSvc.GetAllPics();
-            var model=new InvoiceListViewModel();
+            var model = new InvoiceListViewModel();
             model.InvoicePics = invoicePics;
             model.Invoices = invoices;
             return View(model);
@@ -196,7 +214,7 @@ namespace SDBSY.TeacherWeb.Controllers
             var invoice = invoiceSvc.GetById(id);
             var pics = invoiceSvc.GetPics(id);
             var classes = dataSvc.GetByName("ClassType");
-            var model=new InvoiceEditViewModel()
+            var model = new InvoiceEditViewModel()
             {
                 Classes = JsonConvert.SerializeObject(classes, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() }),
                 Invoice = invoice,
@@ -215,6 +233,7 @@ namespace SDBSY.TeacherWeb.Controllers
             //1.保存信息
             var dto = new InvoiceEditDTO()
             {
+                IsHouQin = model.IsHouQin,
                 ClassId = model.ClassId,
                 Detail = model.Detail,
                 GoodsName = model.GoodsName,
@@ -224,7 +243,7 @@ namespace SDBSY.TeacherWeb.Controllers
             };
             invoiceSvc.Update(dto);
             //2.保存图片
-            if (model.UpFiles.Length > 0)
+            if (model.UpFiles.Length > 0&&model.UpFiles[0]!=null)
             {
                 //2.1.清理原来的图片
                 invoiceSvc.DeletePics(dto.Id);
@@ -238,10 +257,14 @@ namespace SDBSY.TeacherWeb.Controllers
                         var result = await SaveImgAsync(file);
                         if (result.Status == "ok")
                         {
+                            var data = Convert.ToString(result.Data).Split('|');
+                            var filePath = serverUrl + data[0];
+                            var thumbPath = serverUrl + data[1];
                             var dto1 = new InvoicePicAddNewDTO()
                             {
                                 InvocieId = dto.Id,
-                                Url = result.Data.ToString()
+                                Url = filePath,
+                                ThumbUrl = thumbPath
                             };
                             long picId = invoiceSvc.AddNewPic(dto1);
                             log.Debug("保存图片成功-------");
@@ -259,14 +282,14 @@ namespace SDBSY.TeacherWeb.Controllers
                 }
 
             }
-            return Json(new AjaxResult() {Status = "ok"});
+            return Json(new AjaxResult() { Status = "ok" });
         }
 
         [HttpPost]
         public ActionResult Del(long id)
         {
             invoiceSvc.Delete(id);
-            return Json(new AjaxResult() {Status = "ok"});
+            return Json(new AjaxResult() { Status = "ok" });
         }
     }
 }

@@ -12,19 +12,12 @@ namespace SDBSY.TeacherWeb.Models
         public long TeacherId { get; set; }
         [Display(Name = "物品名称")]
         [Required(ErrorMessage = "请输入{0}")]
-        public string GoodsName { get; set; }
-        [Display(Name = "申领时间")]
-        [Required(ErrorMessage = "请输入{0}")]
-        public DateTime ApplyTime { get; set; }
-        [Display(Name = "归还时间")]
-        [Required(ErrorMessage = "请输入{0}")]
-        public DateTime ReturnTime { get; set; }
+        public long GoodsId { get; set; }
         [Display(Name = "申领班级")]
         [Required(ErrorMessage = "请选择{0}")]
         public long ClassId { get; set; }
-        [Display(Name = "存档资料")]
-        [Required(ErrorMessage = "请选择{0}")]
-        [ValidateFile]
-        public HttpPostedFileBase[] UpFiles { get; set; }
+        [Display(Name = "物品数量")]
+        [Required(ErrorMessage = "请输入{0}")]
+        public int Amount { get; set; }//数量
     }
 }

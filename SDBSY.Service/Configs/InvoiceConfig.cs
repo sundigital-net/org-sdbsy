@@ -34,7 +34,7 @@ namespace SDBSY.Service.Configs
         {
             ToTable("T_Invoices");
             HasRequired(t=>t.Teacher).WithMany().HasForeignKey(t=>t.TeacherId).WillCascadeOnDelete(false);
-            HasRequired(t=>t.Class).WithMany().HasForeignKey(t=>t.ClassId).WillCascadeOnDelete(false);
+            HasOptional(t=>t.Class).WithMany().HasForeignKey(t=>t.ClassId).WillCascadeOnDelete(false);
             Property(t => t.Detail).IsRequired().HasMaxLength(1024);
             Property(t => t.GoodsName).IsRequired().HasMaxLength(100);
         }

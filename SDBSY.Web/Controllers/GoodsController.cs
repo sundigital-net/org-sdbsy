@@ -15,18 +15,89 @@ namespace SDBSY.Web.Controllers
     public class GoodsController : Controller
     {
         public IGoodsService goodsSvc { get; set; }
+        public IAdminUserService adminSvc { get; set; }
         public IAdminLogService logSvc { get; set; }
+
+        #region 物品类型
+        [CheckPermission("GoodsType.List")]
+        public ActionResult GoodsTypeList()
+        {
+            var types = goodsSvc.GetAllTypes();
+            return View(types);
+        }
+        [CheckPermission("GoodsType.Add")]
+        public ActionResult GoodsTypeAdd()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [CheckPermission("GoodsType.Add")]
+        public ActionResult GoodsTypeAdd(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return Json(new AjaxResult() {Status = "error",ErrorMsg = "名称必填"});
+            }
+
+            var typeId= goodsSvc.AddGoodsType(0,name);
+            if (typeId <= 0)
+            {
+                return Json(new AjaxResult() { Status = "error", ErrorMsg = "已存在相同的名称" });
+            }
+            return Json(new AjaxResult() { Status ="ok"});
+        }
+
+        [HttpGet]
+        [CheckPermission("GoodsType.Edit")]
+        public ActionResult GoodsTypeEdit(long id)
+        {
+            var type = goodsSvc.GetTypeById(id);
+            return View(type);
+        }
+
+        [HttpPost]
+        [CheckPermission("GoodsType.Edit")]
+        public ActionResult GoodsTypeEdit(long id, string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return Json(new AjaxResult() {Status = "error", ErrorMsg = "名称必填"});
+            }
+
+            var typeId= goodsSvc.AddGoodsType(id, name);
+            if (typeId <= 0)
+            {
+                return Json(new AjaxResult() { Status = "error", ErrorMsg = "已存在相同的名称" });
+            }
+
+            return Json(new AjaxResult() {Status = "ok"});
+        }
+        #endregion
+
+
+
         // GET: Goods
         [CheckPermission("Goods.Index")]
         public ActionResult Index(long id)
         {
-            return View();
+            var types = goodsSvc.GetAllTypes();
+            var goods = goodsSvc.GetById(id);
+            var model=new GoodsIndexViewModel()
+            {
+                Goods = goods,
+                GoodsTypes = types
+            };
+            return View(model);
         }
+
+        
         [HttpGet]
         [CheckPermission("Goods.Add")]
         public ActionResult Add()
         {
-            return View();
+            var types = goodsSvc.GetAllTypes();
+            return View(types);
         }
         [HttpPost]
         [CheckPermission("Goods.Add")]
@@ -40,9 +111,9 @@ namespace SDBSY.Web.Controllers
             {
                 try
                 {
-                    long id = goodsSvc.AddNew(model.Name, model.Unit, model.Seller, model.Maker, model.Format);
+                    long id = goodsSvc.AddNewOrEdit(model.Id,model.GoodsTypeId,model.Name, model.Unit, model.Seller, model.Maker, model.Format);
                     long userId = (long)AdminHelper.GetUserId(HttpContext);
-                    logSvc.AddNew(userId, "添加物品,id=" + id);
+                    logSvc.AddNew(userId, "添加或编辑物品,id=" + id);
                     tran.Complete();
                     return Json(new AjaxResult { Status = "ok" });
                 }
@@ -102,7 +173,7 @@ namespace SDBSY.Web.Controllers
             {
                 try
                 {
-                    goodsSvc.RecordDelete(id);
+                    goodsSvc.BuyRecordDelete(id);
                     long userId = (long)AdminHelper.GetUserId(HttpContext);
                     logSvc.AddNew(userId, "删除入库记录" + id);
                     tran.Complete();
@@ -125,19 +196,19 @@ namespace SDBSY.Web.Controllers
             long userId = (long)AdminHelper.GetUserId(HttpContext);
             foreach (long id in selectedIds)
             {
-                goodsSvc.RecordDelete(id);
+                goodsSvc.BuyRecordDelete(id);
                 logSvc.AddNew(userId, "删除入库记录,id=" + id);
             }
             return Json(new AjaxResult { Status = "ok" });
         }
-        [CheckPermission("GoodsAllRecord.List")]
+        [CheckPermission("GoodsBuyRecord.List")]
         public ActionResult BuyRecordsList(long id, DateTime? startTime, DateTime? endTime)
         {
             //食材
             var goods = goodsSvc.GetAll().ToList();
             goods.Insert(0, new GoodsDTO { Name = "全部", Id = 0 });
             //食物的入库记录
-            GoodsAllRecordDTO[] records;
+            GoodsBuyRecordDTO[] records;
             if (id <= 0)
             {//所有记录
                 records = goodsSvc.GetAllRecords();
@@ -208,7 +279,7 @@ namespace SDBSY.Web.Controllers
             {
                 try
                 {
-                    goodsSvc.RecordDelete(id);
+                    goodsSvc.ApplyRecordDelete(id);
                     long userId = (long)AdminHelper.GetUserId(HttpContext);
                     logSvc.AddNew(userId, "删除申领记录" + id);
                     tran.Complete();
@@ -231,17 +302,17 @@ namespace SDBSY.Web.Controllers
             long userId = (long)AdminHelper.GetUserId(HttpContext);
             foreach (long id in selectedIds)
             {
-                goodsSvc.RecordDelete(id);
+                goodsSvc.ApplyRecordDelete(id);
                 logSvc.AddNew(userId, "删除申领记录,id=" + id);
             }
             return Json(new AjaxResult { Status = "ok" });
         }
-        [CheckPermission("GoodsAllApplyRecord.List")]
-        public ActionResult ApplyRecordsList(long id, DateTime? applyTime, DateTime? returnTime)
+        [CheckPermission("GoodsApplyRecord.List")]
+        public ActionResult ApplyRecordsList(long id, DateTime? startTime, DateTime? endTime)
         {
             var goods = goodsSvc.GetAll().ToList();
             goods.Insert(0, new GoodsDTO { Name = "全部", Id = 0 });
-            GoodsAllApplyRecordDTO[] records;
+            GoodsApplyRecordDTO[] records;
             if (id <= 0)
             {//所有记录
                 records = goodsSvc.GetAllApplyRrcord();
@@ -250,61 +321,72 @@ namespace SDBSY.Web.Controllers
             {
                 records = goodsSvc.GetAllApplyRrcord(id);
             }
-            if (applyTime != null)
+            if (startTime != null)
             {
-                records = records.Where(t => t.ApplyTime >= applyTime.Value).ToArray();
+                records = records.Where(t => t.CreateDateTime >= startTime.Value).ToArray();
             }
-            if (returnTime != null)
+            if (endTime != null)
             {
-                records = records.Where(t => t.ReturnTime < returnTime.Value.AddDays(1)).ToArray();
+                records = records.Where(t => t.CreateDateTime < endTime.Value.AddDays(1)).ToArray();
             }
 
-            GoodsApplyRecordsListView model = new GoodsApplyRecordsListView()
+            GoodsApplyRecordsListViewModel model = new GoodsApplyRecordsListViewModel()
             {
                 Goods = goods.ToArray(),
                 Records = records,
                 GoodsId = id,
-                ApplyTime = applyTime == null ? "" : applyTime.Value.ToShortDateString(),
-                ReturnTime = returnTime == null ? "" : returnTime.Value.ToShortDateString(),
+                StartTime = startTime == null ? "" : startTime.Value.ToShortDateString(),
+                EndTime = endTime == null ? "" : endTime.Value.ToShortDateString(),
             };
             return View(model);
         }
         [HttpGet]
-        [CheckPermission("GoodsAllApplyRecord.Add")]
-        public ActionResult ApplyRecordAdd()
+        //[CheckPermission("GoodsApplyRecord.List")]
+        public ActionResult ApplyRecordIndex(long id)
         {
-            var goods = goodsSvc.GetAll();
-            return View(goods);
+            var userId = AdminHelper.GetUserId(HttpContext);
+            if (userId == null)
+            {
+                return RedirectToAction("Signin", "Management");
+            }
+
+            var record = goodsSvc.GetOne(id);
+            var goods = goodsSvc.GetById(record.GoodsId);
+            //物品申领审核分为两类（暂定为两类）
+            var hasPermission = adminSvc.HasPermission(userId.Value, "GoodsApplyRecord.ShenHe" + goods.GoodsTypeId.ToString());
+            if (hasPermission)
+            {
+                return View(record);
+            }
+            else
+            {
+                return Content("抱歉，您无权限进行此操作");
+            }
+            
         }
         [HttpPost]
-        [CheckPermission("GoodsAllApplyRecord.Add")]
-        public ActionResult ApplyRecordAdd(GoodsApplyRecordAddPostModel model)
+        //[CheckPermission("GoodsApplyRecord.ShenHe")]
+        public ActionResult ApplyRecordShenhe(long goodsId, long id, int status, string msg)
         {
-            if (!ModelState.IsValid)
+            var userId=AdminHelper.GetUserId(HttpContext);
+            if (userId == null)
             {
-                return Json(new AjaxResult { Status = "error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
+                return RedirectToAction("Signin","Management");
             }
-            using (var tran = new TransactionScope())
+
+            var goods = goodsSvc.GetById(goodsId);
+            //物品申领审核分为两类（暂定为两类）
+            var hasPermission = adminSvc.HasPermission(userId.Value, "GoodsApplyRecord.ShenHe" + goods.GoodsTypeId.ToString());
+            if (hasPermission)
             {
-                try
-                {
-                    long id = goodsSvc.AddNewGoodsApplyRecord(model.GoodsId, model.ClassId, model.TeacherId, (DateTime)model.ApplyTime, (DateTime)model.ReturnTime);
-                    long userId = (long)AdminHelper.GetUserId(HttpContext);
-                    logSvc.AddNew(userId, "添加申领记录,id" + id);
-                    tran.Complete();
-                    return Json(new AjaxResult { Status = "ok" });
-                }
-                catch (Exception ex)
-                {
-                    return Json(new AjaxResult
-                    {
-                        Status = "error",
-                        ErrorMsg = ex.Message
-                    });
-                }
+                goodsSvc.ApplyRecordShenhe(id, status, msg);
+                return Json(new AjaxResult { Status = "ok" });
+            }
+            else
+            {
+                return Json(new AjaxResult() {Status = "error", ErrorMsg = "抱歉，您无权限进行此操作" });
             }
         }
-
 
     }
 }

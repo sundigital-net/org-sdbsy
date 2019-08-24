@@ -1090,9 +1090,10 @@
     <Compile Include="Models\FoodBuyRecordsListViewModel.cs" />
     <Compile Include="Models\GoodsAddPostModel.cs" />
     <Compile Include="Models\GoodsApplyRecordAddPostModel.cs" />
-    <Compile Include="Models\GoodsApplyRecordsListView.cs" />
+    <Compile Include="Models\GoodsApplyRecordsListViewModel.cs" />
     <Compile Include="Models\GoodsBuyRecordAddPostModel.cs" />
     <Compile Include="Models\GoodsBuyRecordListViewModel.cs" />
+    <Compile Include="Models\GoodsIndexViewModel.cs" />
     <Compile Include="Models\InvoiceIndexViewModel.cs" />
     <Compile Include="Models\InvoiceListViewModel.cs" />
     <Compile Include="Models\MyJsonResult.cs" />
@@ -1179,7 +1180,15 @@
     <Content Include="Views\Goods\BuyRecordsList.cshtml" />
     <Content Include="Views\Goods\BuyRecordAdd.cshtml" />
     <Content Include="Views\AdminUser\Edit.cshtml" />
-    <Content Include="Views\Goods\ApplyRecordList.cshtml" />
+    <Content Include="Views\Teacher\TrainingList.cshtml" />
+    <Content Include="Views\Teacher\CertificateList.cshtml" />
+    <Content Include="Views\Teacher\CertificatePicList.cshtml" />
+    <Content Include="Views\Goods\ApplyRecordsList.cshtml" />
+    <Content Include="Views\Goods\ApplyRecordIndex.cshtml" />
+    <Content Include="Views\Goods\Index.cshtml" />
+    <Content Include="Views\Goods\GoodsTypeList.cshtml" />
+    <Content Include="Views\Goods\GoodsTypeAdd.cshtml" />
+    <Content Include="Views\Goods\GoodsTypeEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1189,6 +1198,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Training\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SDBSY.Common\SDBSY.Common.csproj">

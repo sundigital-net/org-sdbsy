@@ -16,6 +16,7 @@ namespace SDBSY.TeacherWeb.Models
         [DisplayName("密码")]
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "{0}不能为空")]
+        [StringLength(30, MinimumLength = 8, ErrorMessage = "{0}长度必须在{2}-{1}之间")]
         public string Password { get; set; }
         [DisplayName("确认密码")]
         [DataType(DataType.Password)]

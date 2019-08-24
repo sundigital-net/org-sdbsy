@@ -14,11 +14,14 @@ using System.Net;
 using System.Drawing;
 using SDBSY.UserWeb.Models;
 using System.Transactions;
+using log4net;
+using Newtonsoft.Json;
 
 namespace SDBSY.UserWeb.Controllers
 {
     public class HomeController : Controller
     {
+        public static ILog log = LogManager.GetLogger("HomeController");
         public static readonly string serverUrl = WebConfigurationManager.AppSettings["fileserver"];
         public IUserService userSvc { get; set; }
         public IDataDictionaryService dataSvc { get; set; }
@@ -77,7 +80,7 @@ namespace SDBSY.UserWeb.Controllers
                 return Json(new AjaxResult { Status = "error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
             }
             string loginChatcha = (string)TempData["Captcha"];
-            if (string.IsNullOrEmpty(loginChatcha) || loginChatcha != model.LoginCaptcha)
+            if (string.IsNullOrEmpty(loginChatcha) || loginChatcha.ToLower() != model.LoginCaptcha.ToLower())
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "验证码错误，请重试。" });
             }
@@ -126,8 +129,13 @@ namespace SDBSY.UserWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "手机号已被占用" });
             }
+            //密码复杂度验证
+            if (!CommonHelper.CheckPwd(model.Pwd))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "密码长度为8-30，必须包括数字、字母以及字符。" });
+            }
             string regChatcha = (string)TempData["Captcha"];
-            if (string.IsNullOrEmpty(regChatcha) || regChatcha != model.RegCaptcha)
+            if (string.IsNullOrEmpty(regChatcha) || regChatcha.ToLower() != model.RegCaptcha.ToLower())
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "验证码错误，请重试。" });
             }
@@ -200,83 +208,90 @@ namespace SDBSY.UserWeb.Controllers
             var bloodTypes = dataSvc.GetByName("BloodType");//血型
             var countries = couSvc.GetAll();//国籍
             var nations = nationSvc.GetAll().ToList();//民族
-            nations.Insert(0, new NationDTO { Name = "请选择" });
+            //nations.Insert(0, new NationDTO { Value = "请选择" });
 
             var identities = dataSvc.GetByName("Identity");//港澳台侨外
             //var places = placeSvc.GetAll().ToList();//旧地市代码
             var places = newplaceSvc.GetByParent(0).ToList();//省
             places.Clear();
-            places.Insert(0, new NewPlaceDTO { Name = "请选择" });
+            //places.Insert(0, new NewPlaceDTO { Name = "请选择" });
 
             var huKouXingZhi = dataSvc.GetByName("HuKouXingZhi").ToList();//户口性质
-            huKouXingZhi.Insert(0, new DataDictionaryDTO { Name = "HuKouXingZhi", Value = "请选择" });
+            //huKouXingZhi.Insert(0, new DataDictionaryDTO { Name = "HuKouXingZhi", Value = "请选择" });
             var feiNongHuKouTypes = dataSvc.GetByName("FeiNongHuKouType").ToList();//非农户口类型
-            feiNongHuKouTypes.Insert(0, new DataDictionaryDTO { Name = "FeiNongHuKouType", Value = "请选择" });
+            //feiNongHuKouTypes.Insert(0, new DataDictionaryDTO { Name = "FeiNongHuKouType", Value = "请选择" });
 
             var studyTypes = dataSvc.GetByName("StudyType");//就读方式
             var isStayAtHome = dataSvc.GetByName("IsStayAtHome");//是否留守儿童
             var healthyTypes = dataSvc.GetByName("HealthyType");//健康状况
             var disabilityTypes = dataSvc.GetByName("DisabilityType").ToList();//残疾类别
-            disabilityTypes.Insert(0, new DataDictionaryDTO { Name = "DisabilityType", Value = "请选择" });
+            //disabilityTypes.Insert(0, new DataDictionaryDTO { Name = "DisabilityType", Value = "请选择" });
 
             var adultIdCardTypes = dataSvc.GetByName("AdultIdCardType");//成人证件类型
             AddNewInfoViewModel model = new AddNewInfoViewModel();
             model.UserId = userId;
-            model.IdCardTypes = idCardTypes;
-            model.BloodTypes = bloodTypes;
-            model.Countrties = countries;
-            model.Nations = nations.ToArray();
-            model.Identities = identities;
+            model.IdCardTypes = JsonConvert.SerializeObject(idCardTypes, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
+            model.BloodTypes = JsonConvert.SerializeObject(bloodTypes, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() }); 
+            model.Countries = JsonConvert.SerializeObject(countries, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
+            model.Nations = JsonConvert.SerializeObject(nations.ToArray(), Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
+            model.Identities = JsonConvert.SerializeObject(identities, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
             model.Places = places.ToArray();
-            model.HuKouXingZhi = huKouXingZhi.ToArray();
-            model.FeiNongHuKouTypes = feiNongHuKouTypes.ToArray();
-            model.StudyTypes = studyTypes;
-            model.IsStayAtHome = isStayAtHome;
-            model.HealthyTypes = healthyTypes;
-            model.DisabilityTypes = disabilityTypes.ToArray();
-            model.AdultIdCardTypes = adultIdCardTypes;
+            model.HuKouXingZhi = JsonConvert.SerializeObject(huKouXingZhi.ToArray(), Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
+            model.FeiNongHuKouTypes = JsonConvert.SerializeObject(feiNongHuKouTypes.ToArray(), Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
+            model.StudyTypes = JsonConvert.SerializeObject(studyTypes, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() }); 
+            model.IsStayAtHome = JsonConvert.SerializeObject(isStayAtHome, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() }); 
+            model.HealthyTypes = JsonConvert.SerializeObject(healthyTypes, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
+            model.DisabilityTypes = JsonConvert.SerializeObject(disabilityTypes.ToArray(), Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
+            model.AdultIdCardTypes = JsonConvert.SerializeObject(adultIdCardTypes, Formatting.Indented, new JsonSerializerSettings() { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
             model.ShowChooseClass = chooseClass.ToLower() == "on";
-            model.Classes = classes;
+            model.Classes = JsonConvert.SerializeObject(classes,Formatting.Indented,
+                new JsonSerializerSettings(){ ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
             return View(model);
         }
+
+        #region 照片文件直接在form内提交 启用
+        
+
         [HttpPost]
         [CheckSystem]
         [CheckPermission("user")]
-        public async System.Threading.Tasks.Task<ActionResult> UploadFileAsync(string base64string, string path)
+        public async System.Threading.Tasks.Task<AjaxResult> UploadFileAsync(HttpPostedFileBase file)
         {
-            base64string = base64string.Replace("data:image/png;base64,", "");
-            byte[] bt = Convert.FromBase64String(base64string);
+            //base64string = base64string.Replace("data:image/png;base64,", "");
+            //byte[] bt = Convert.FromBase64String(base64string);
 
 
             Guid guid = Guid.NewGuid();
+            using (var handler = new HttpClientHandler(){AutomaticDecompression = DecompressionMethods.None})
             using (HttpClient httpClient = new HttpClient())
-            using (MemoryStream memoryStream = new MemoryStream(bt))
+            
             {
                 //Bitmap bitmap = new Bitmap(memoryStream);
                 MultipartFormDataContent content = new MultipartFormDataContent();
                 content.Headers.Add("uid", "sdbsy");//增加账号密码，防止恶意上传
                 content.Headers.Add("pwd", "ysbds");
-                content.Headers.Add("path", path);
-                content.Add(new StreamContent(memoryStream), "file", guid.ToString() + ".png");
-                var respMsg = await httpClient.PostAsync(serverUrl + "/Home/FileUpload/", content);
+                content.Headers.Add("path", "PhotoAndQuanJiaFu");
+                content.Add(new StreamContent(file.InputStream), "file", guid.ToString() + ".png");
+                var respMsg = httpClient.PostAsync(serverUrl + "/Home/FileUpload/", content).Result;
                 string msgBody = await respMsg.Content.ReadAsStringAsync();
 
                 if (respMsg.StatusCode == HttpStatusCode.OK)
                 {
                     //请求成功
                     var result = (AjaxResult)Newtonsoft.Json.JsonConvert.DeserializeObject(msgBody, typeof(AjaxResult));
-                    result.Data = serverUrl + result.Data;
-                    return Json(result);
+                    
+                    return result;
                 }
                 else
                 {
-                    return Json(new AjaxResult { Status = "error" });
+                    return new AjaxResult { Status = "error",ErrorMsg = msgBody};
                 }
 
             }
         }
+        #endregion
 
-        #region 照片上传（通过十六进制同步文件上传）
+        #region 照片上传（通过十六进制同步文件上传） 停用
         /// <summary>
         /// 照片上传
         /// </summary>
@@ -304,13 +319,31 @@ namespace SDBSY.UserWeb.Controllers
         [HttpPost]
         [CheckSystem]
         [CheckPermission("user")]
-        public ActionResult AddInfo(AddNewInfoModel model)
+        public async System.Threading.Tasks.Task<ActionResult> AddInfo(AddNewInfoModel model, HttpPostedFileBase[] photoFiles, HttpPostedFileBase[] tijianFiles)
         {
+            //throw new ArgumentException("主动抛出的异常");
             if (!ModelState.IsValid)
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
             }
 
+            if (photoFiles == null||photoFiles.Length<=0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "请上传幼儿照片" });
+            }
+
+            if (photoFiles[0].ContentLength > 1024 * 1024 * 1)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "幼儿照片不能大于1M" });
+            }
+            if (tijianFiles == null|| tijianFiles.Length <= 0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "请上传全家福" });
+            }
+            if (tijianFiles[0].ContentLength > 1024 * 1024 * 1)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "全家福不能大于1M" });
+            }
             //联动判断
             if (model.IdCardTypeId != 7)
             {
@@ -324,11 +357,14 @@ namespace SDBSY.UserWeb.Controllers
                     {
                         return Json(new AjaxResult { Status = "error", ErrorMsg = "幼儿证件号码已经被使用。" });
                     }
+                    
+                     //验证规则
                     bool b = CommonHelper.CheckIDCard18(model.IdCardNum);
                     if (!b)
                     {
                         return Json(new AjaxResult { Status = "error", ErrorMsg = "幼儿证件号码验证错误。" });
                     }
+                    
                 }
             }
             //中国国籍 ，民族必填，户口性质必填
@@ -369,8 +405,10 @@ namespace SDBSY.UserWeb.Controllers
                     if (!string.IsNullOrEmpty(model.FatherName))
                     {
                         //填写姓名后必须填写单位、手机号、证件号等信息
-                        if (string.IsNullOrEmpty(model.FatherWorkUnit) ||
-                            string.IsNullOrEmpty(model.FatherPhoneNum) || string.IsNullOrEmpty(model.FatherCardNum))
+                        if (model.FatherCardTypeId==null||
+                            string.IsNullOrEmpty(model.FatherWorkUnit) ||
+                            string.IsNullOrEmpty(model.FatherPhoneNum) || 
+                            string.IsNullOrEmpty(model.FatherCardNum))
                         {
                             return Json(new AjaxResult { Status = "error", ErrorMsg = "父亲工作单位、手机号码、证件号码必填。" });
                         }
@@ -379,12 +417,14 @@ namespace SDBSY.UserWeb.Controllers
                             return Json(new AjaxResult { Status = "error", ErrorMsg = "父亲证件号码错误。" });
                         }
                         fatherId = AddNewParent(model.FatherName, model.FatherWorkUnit, model.FatherPhoneNum,
-                            model.FatherCardTypeId, model.FatherCardNum);
+                            model.FatherCardTypeId.Value, model.FatherCardNum);
                     }
                     if (!string.IsNullOrEmpty(model.MotherName))
                     {
-                        if (string.IsNullOrEmpty(model.MotherWorkUnit) ||
-                            string.IsNullOrEmpty(model.MotherPhoneNum) || string.IsNullOrEmpty(model.MotherCardNum))
+                        if (model.MotherCardTypeId==null||
+                            string.IsNullOrEmpty(model.MotherWorkUnit) ||
+                            string.IsNullOrEmpty(model.MotherPhoneNum) || 
+                            string.IsNullOrEmpty(model.MotherCardNum))
                         {
                             return Json(new AjaxResult { Status = "error", ErrorMsg = "母亲工作单位、手机号码、证件号码必填。" });
                         }
@@ -393,7 +433,7 @@ namespace SDBSY.UserWeb.Controllers
                             return Json(new AjaxResult { Status = "error", ErrorMsg = "母亲证件号码错误。" });
                         }
                         motherId = AddNewParent(model.MotherName, model.MotherWorkUnit, model.MotherPhoneNum,
-                            model.MotherCardTypeId, model.MotherCardNum);
+                            model.MotherCardTypeId.Value, model.MotherCardNum);
                     }
                     if (model.GuardianCardTypeId == 8 && !CheckIdCard(model.GuardianCardNum))
                     {
@@ -401,7 +441,9 @@ namespace SDBSY.UserWeb.Controllers
                     }
                     long guardianId = AddNewGuardian(model.GuardianName, model.GuardianCardTypeId, model.GuardianCardNum);
                     StudentAddNewDTO dto = ToDTO(model, guardianId, fatherId, motherId);
-                    stuSvc.AddNew(dto);
+                    long stuId= stuSvc.AddNew(dto);
+                    await SaveImgAsync(photoFiles, stuId, true);
+                    await SaveImgAsync(tijianFiles, stuId, false);
                     tran.Complete();
                     return Json(new AjaxResult { Status = "ok" });
                 }
@@ -412,11 +454,47 @@ namespace SDBSY.UserWeb.Controllers
                 
             }
         }
+
+        private async System.Threading.Tasks.Task SaveImgAsync(HttpPostedFileBase[] files,long stuId,bool type)//type :true表示幼儿照片，false表示全家福
+        {
+            if (files.Length > 0 && files[0] != null)
+            {
+                for (int i = 0; i < files.Length; i++)
+                {
+                    HttpPostedFileBase file = files[i];//这个对象是用来接收文件,利用这个对象可以获取文件的name path等
+                    try
+                    {
+                        log.Debug("保存图片开始-------");
+                        var result = await UploadFileAsync(file);
+                        log.Debug("解析返回的result-------");
+                        if (result.Status == "ok")
+                        {
+                            log.Debug("result.Status=ok-------");
+                            log.Debug("result.Data-------"+ result.Data);
+                            var data = Convert.ToString(result.Data).Split('|');
+                            var filePath = serverUrl + data[0];
+                            var thumbPath = serverUrl + data[1];
+
+                            
+                            stuSvc.UpdateImg(stuId,filePath,type);
+
+                            log.Debug("保存图片成功-------");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        
+                    }
+                }
+
+            }
+        }
+
         private StudentAddNewDTO ToDTO(AddNewInfoModel model, long guardianId, long? fatherId, long? motherId)
         {
             StudentAddNewDTO dto = new StudentAddNewDTO();
-            dto.PhotoUrl = model.PhotoUrl;
-            dto.TijianUrl = model.TijianUrl;
+            //dto.PhotoUrl = model.PhotoUrl;
+            //dto.TijianUrl = model.TijianUrl;
             dto.BankCardNum = model.BankCardNum;
             dto.BirthDate = model.BirthDate;
             var birthYear = dto.BirthDate.Year;
@@ -529,7 +607,7 @@ namespace SDBSY.UserWeb.Controllers
             var bloodTypes = dataSvc.GetByName("BloodType");//血型
             var countries = couSvc.GetAll();//国籍
             var nations = nationSvc.GetAll().ToList();//民族
-            nations.Insert(0, new NationDTO { Name = "请选择" });
+            nations.Insert(0, new NationDTO { Value = "请选择" });
 
             var identities = dataSvc.GetByName("Identity");//港澳台侨外
             var places = placeSvc.GetAll().ToList();//地市代码
@@ -620,7 +698,7 @@ namespace SDBSY.UserWeb.Controllers
         {
             #region 首先验证图形验证码
             string losePassChatcha = (string)TempData["Captcha"];
-            if(string.IsNullOrEmpty(losePassChatcha)||imgCaptcha!=losePassChatcha)
+            if(string.IsNullOrEmpty(losePassChatcha)||imgCaptcha.ToLower()!=losePassChatcha.ToLower())
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "图形验证码错误，请重试。" });
             }
@@ -681,6 +759,11 @@ namespace SDBSY.UserWeb.Controllers
             if(string.IsNullOrEmpty(phoneNum))
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "操作超时" });
+            }
+            //密码复杂度验证
+            if (!CommonHelper.CheckPwd(pwd))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "密码长度为8-30，必须包括数字、字母以及字符。" });
             }
             var user = userSvc.GetByPhoneNum(phoneNum);
             if (user == null)

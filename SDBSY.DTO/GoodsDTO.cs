@@ -28,6 +28,8 @@ namespace SDBSY.DTO
 {
     public class GoodsDTO:BaseDTO
     {
+        public long GoodsTypeId { get; set; }
+        public string GoodsTypeName { get; set; }
         public string Name { get; set; }//名称
         public string Unit { get; set; }//计量单位
         public string Format { get; set; }//规格

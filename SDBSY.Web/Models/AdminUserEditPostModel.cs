@@ -9,9 +9,7 @@ namespace SDBSY.Web.Models
     public class AdminUserEditPostModel
     {
         public long Id { get; set; }
-        [Required]
-        [StringLength(50)]
-        public string Name { get; set; }
-        public long[] PermissionIds { get; set; }
+        
+        public long[] RoleIds { get; set; }
     }
 }

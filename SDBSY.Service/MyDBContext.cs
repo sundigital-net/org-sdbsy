@@ -59,5 +59,6 @@ namespace SDBSY.Service
         public DbSet<GoodsEntity> Goods { get; set; }
         public DbSet<GoodsBuyRecordEntity> GoodsBuyRecords { get; set; }
         public DbSet<GoodsApplyRecordEntity> GoodsApplyRecords { get; set; }
+        public DbSet<GoodsTypeEntity> GoodsTypes { get; set; }
     }
 }

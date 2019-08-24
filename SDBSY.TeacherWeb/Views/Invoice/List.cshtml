@@ -67,6 +67,7 @@
                                         <p>购买人：@invoice.TeacherName</p>
                                         <p>购买时间：@invoice.BuyDateTimeStr</p>
                                         <p>物品名称：@invoice.GoodsName</p>
+                                        <p>后勤管理：@invoice.IsHouQinStr</p>
                                         <p>购买班级：@invoice.ClassName</p>
                                         <p>总金额：@invoice.TotalStr</p>
                                         <p>明细：@invoice.Detail</p>
@@ -81,7 +82,7 @@
                                             {
                                                 if (item.InvoiceId == invoice.Id)
                                                 {
-                                                    <img src="@item.Url" style="max-width: 45%" />
+                                                    <img src="@item.ThumbUrl" style="max-width: 45%" />
                                                 }
                                             }
                                         </p>

@@ -118,5 +118,6 @@ namespace SDBSY.Service.Entities
         public virtual ICollection<WorkEntity> Works { get; set; } = new List<WorkEntity>();
         public virtual ICollection<EducateEntity> Educates { get; set; } = new List<EducateEntity>();
         public virtual ICollection<CertificateEntity> Certificates { get; set; } = new List<CertificateEntity>();
+        public virtual ICollection<GoodsApplyRecordEntity> GoodsApplyRecords { get; set; }=new List<GoodsApplyRecordEntity>();
     }
 }

@@ -8,6 +8,6 @@ namespace SDBSY.TeacherWeb.Models
 {
     public class ApplyRecordListViewModel
     {
-        public GoodsAllApplyRecordDTO[] Applyrecord { get; set; }
+        public GoodsApplyRecordDTO[] Applyrecord { get; set; }
     }
 }

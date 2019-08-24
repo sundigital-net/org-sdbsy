@@ -1,45 +1,65 @@
 ﻿@model UserDTO
-<!DOCTYPE html>
-<html>
+<html lang="en" class="hairlines" style="font-size: 36px;">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>用户中心</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="~/favicon.ico">
+    <title>滨州市实验幼儿园信息采集</title>
+    <link href="~/content/css/chunk-3564dafe.db9c52e2.css" rel="prefetch">
+    <link href="~/content/css/chunk-48e2927b.abd9d418.css" rel="prefetch">
+    <link href="~/content/css/chunk-4e387861.12a0c677.css" rel="prefetch">
+    <link href="~/content/css/chunk-60c3cfac.abd9d418.css" rel="prefetch">
+
+    <link href="~/content/css/app.a3ddf99b.css" rel="preload" as="style">
+    <link href="~/content/css/chunk-vendors.7d5f0cf8.css" rel="preload" as="style">
+    <link href="~/content/css/chunk-vendors.7d5f0cf8.css" rel="stylesheet">
+    <link href="~/content/css/app.a3ddf99b.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-48e2927b.abd9d418.css">
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-60c3cfac.abd9d418.css">
+    <link rel="stylesheet" type="text/css" href="~/content/css/chunk-3564dafe.db9c52e2.css">
     <link rel="stylesheet" type="text/css" href="~/hui/css/hui.css" />
 </head>
-<body>
-    <header class="hui-header">
-        <h1>滨州市实验幼儿园信息采集</h1>
-        <div id="hui-header-menu"></div>
-    </header>
-    <div class="hui-wrap">
-        <div class="hui-center-title" style="margin-top:15px;"><h1>@Model.PhoneNum</h1></div>
-        <div style="padding:28px; text-align:center;" class="hui-text">
-            <button type="button" class="hui-button hui-button-large" id="add-obj">添加幼儿信息</button>
-            <button type="button" class="hui-button hui-button-large" id="edit-obj" style="margin-top:15px;">查看幼儿信息</button>
-        </div>
-    </div>
-    <script type="text/javascript" src="~/hui/js/hui.js"></script>
-    <script type="text/javascript">
-        var meuns = ['退出登录'];
-        var cancel = '关闭菜单';
-        hui('#hui-header-menu').click(function () {
-            hui.actionSheet(meuns, cancel, function (e) {
-                //console.log(e.index);
-                //hui.toast(e.innerHTML);
-                if (e.index == '0') {
-                    window.location.href = "/Home/Logout";
-                        
-                }
-            });
-        });
-        hui("#add-obj").click(function () {
-            window.location.href = "/Home/AddInfo";
-        });
-        hui("#edit-obj").click(function () {
-            window.location.href = "/Home/ChildList/"+@Model.Id;
-        });
+<body style="font-size: 36px;">
+<div id="app">
 
-    </script>
+    <div data-v-585ccf7e="" class="login">
+        <div data-v-585ccf7e="" class="top-title">
+            <div data-v-585ccf7e="" class="title-wrap">
+                <img data-v-585ccf7e="" width="50" height="50" src="~/content/images/logo00.png">
+                <span data-v-585ccf7e="">滨州市实验幼儿园信息采集</span>
+            </div>
+            <p data-v-585ccf7e="" class="phone">@Model.PhoneNum</p></div>
+        <div data-v-585ccf7e="" class="login-btn">
+            <button data-v-585ccf7e="" class="van-button van-button--info van-button--normal van-button--block van-button--round" id="add-obj">
+                <span data-v-585ccf7e="" class="van-button__text">添加幼儿信息</span>
+            </button>
+            <button data-v-585ccf7e="" class="show-info van-button van-button--info van-button--normal van-button--block van-button--round" id="edit-obj">
+                <span data-v-585ccf7e="" class="van-button__text">查看幼儿信息</span>
+            </button>
+        </div></div>
+</div>
+<script type="text/javascript" src="~/hui/js/hui.js"></script>
+<script type="text/javascript">
+    var meuns = ['退出登录'];
+    var cancel = '关闭菜单';
+    hui('#hui-header-menu').click(function () {
+        hui.actionSheet(meuns, cancel, function (e) {
+            //console.log(e.index);
+            //hui.toast(e.innerHTML);
+            if (e.index == '0') {
+                window.location.href = "/Home/Logout";
+                        
+            }
+        });
+    });
+    hui("#add-obj").click(function () {
+        window.location.href = "/Home/AddInfo";
+    });
+    hui("#edit-obj").click(function () {
+        window.location.href = "/Home/ChildList/"+@Model.Id;
+    });
+
+</script>
 </body>
 </html>

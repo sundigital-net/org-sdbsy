@@ -68,9 +68,10 @@
                 success: function (msg) {//请求成功后执行的回调函数
                     if (msg.status == "ok") {
                         hui.toast('照片上传成功!');
-                        hui("#imageUrl").val(msg.data);
+                        var arrData = msg.data.split('|');
+                        hui("#imageUrl").val(arrData[1]);
                         var type = gettype();
-                        var url = hui("#imageUrl").val();
+                        var url ="http://192.144.173.160:8008"+ hui("#imageUrl").val();
                         var useragent = navigator.userAgent;
                         if (useragent.match(/MicroMessenger/i) != 'MicroMessenger') {//不是微信浏览器
                             window.opener.document.getElementById(type + "Url").value = url;

@@ -15,7 +15,7 @@ namespace SDBSY.TeacherWeb.App_Start
 
             var file = value as HttpPostedFileBase[];
 
-            if (file == null||file.Length<=0)
+            if (file == null||file.Length<=0||file[0]==null)
                 return false;
             else
             {

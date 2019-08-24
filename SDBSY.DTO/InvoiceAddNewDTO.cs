@@ -29,7 +29,8 @@ namespace SDBSY.DTO
     public class InvoiceAddNewDTO
     {
         public long TeacherId { get; set; }//购买人
-        public long ClassId { get; set; }
+        public bool IsHouQin { get; set; }
+        public long? ClassId { get; set; }
         public string GoodsName { get; set; }//物品名称
         public DateTime BuyDateTime { get; set; }//购买日期
         public decimal Total { get; set; }

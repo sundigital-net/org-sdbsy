@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -108,7 +109,7 @@ namespace SDBSY.Common
         {
             int randAngle = 45;     //随机转动角度  
             int mapwidth = (int)(randomcode.Length * 20);
-            using (Bitmap map = new Bitmap(mapwidth, 35))//创建图片背景，设置其长宽  
+            using (Bitmap map = new Bitmap(mapwidth, 24))//创建图片背景，设置其长宽  
             using (Graphics graph = Graphics.FromImage(map))
             {
                 graph.Clear(Color.AliceBlue);
@@ -151,7 +152,7 @@ namespace SDBSY.Common
 
                     graph.TranslateTransform(dot.X, dot.Y);
                     graph.RotateTransform(angle);
-                    graph.DrawString(chars[i].ToString(), f, b, 2, 6, format); // 第4、5个参数控制左、上间距  
+                    graph.DrawString(chars[i].ToString(), f, b, 2, 1, format); // 第4、5个参数控制左、上间距  
                     graph.RotateTransform(-angle);
                     graph.TranslateTransform(2, -dot.Y);
                 }
@@ -188,6 +189,31 @@ namespace SDBSY.Common
             }
 
             return isMoblie;
+        }
+
+        public static bool CheckPwd(string pwd)
+        {
+            var regex = new Regex(@"
+            (?=.*[0-9])                     #必须包含数字
+            (?=.*[a-zA-Z])                  #必须包含小写或大写字母
+            (?=([\x21-\x7e]+)[^a-zA-Z0-9])  #必须包含特殊符号
+            .{8,30}                         #至少8个字符，最多30个字符
+            ", RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
+            return regex.IsMatch(pwd);
+
+            /*
+            var result = false;
+            if (string.IsNullOrEmpty(pwd)||pwd.Length<8)
+            {
+                return result;
+            }
+
+            foreach (var c in pwd)
+            {
+                
+            }
+            return result;
+            */
         }
     }
 }

@@ -8,6 +8,6 @@ namespace SDBSY.DTO
 {
     public class CountryDTO:BaseDTO
     {
-        public string Name { get; set; }
+        public string Value { get; set; }
     }
 }

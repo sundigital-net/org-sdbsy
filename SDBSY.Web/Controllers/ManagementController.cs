@@ -157,6 +157,11 @@ namespace SDBSY.Web.Controllers
             {
                 return Json(new AjaxResult { Status = "error",ErrorMsg="旧密码输入错误" });
             }
+            //密码复杂度验证
+            if(!CommonHelper.CheckPwd(model.NewPassword))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "密码长度为8-30，必须包括数字、字母以及字符。" });
+            }
             adminUserSvc.UpdatePassword(model.Id, model.NewPassword);
             long userId = (long)AdminHelper.GetUserId(HttpContext);
             logSvc.AddNew(userId, "修改密码");

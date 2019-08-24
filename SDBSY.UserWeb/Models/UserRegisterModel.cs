@@ -13,7 +13,7 @@ namespace SDBSY.UserWeb.Models
         [Required(ErrorMessage = "{0}不能为空")]
         public string PhoneNum { get; set; }
         [DisplayName("密码")]
-        [StringLength(10, MinimumLength = 6, ErrorMessage = "{0}长度必须在{1}-{2}之间")]
+        [StringLength(30, MinimumLength = 8, ErrorMessage = "{0}长度必须在{2}-{1}之间")]
         public string Pwd { get; set; }
         [DisplayName("确认密码")]
         [Compare("Pwd", ErrorMessage = "两次密码不一致")]

@@ -30,15 +30,15 @@
             <form id="formLogin" action="" method="post" class="input-group register-group">
                 <div class="input-row">
                     <label><i class="icon-uniE938"></i></label>
-                    <input type="text" placeholder="手机号码" name="account" pattern="^(13[0-9]|15[0|1|2|3|5|6|7|8|9]|17[7|8]|18[0|1|2|3|5|6|7|8|9]|19[8|9])\d{8}$">
+                    <input type="text" placeholder="手机号码" name="account" autocomplete="off" pattern="^(13[0-9]|15[0|1|2|3|5|6|7|8|9]|17[7|8]|18[0|1|2|3|5|6|7|8|9]|19[8|9])\d{8}$">
                 </div>
                 <div class="input-row">
                     <label><i class="icon-uniE937"></i></label>
-                    <input type="password" placeholder="密码" name="password">
+                    <input type="password" placeholder="密码" name="password" autocomplete="off">
                 </div>
                 <div class="input-row">
                     <label><i class="icon-uniE969"></i></label>
-                    <input class="code-in" type="text" placeholder="验证码" name="captcha">
+                    <input class="code-in" type="text" placeholder="验证码" name="captcha" autocomplete="off">
                     <img class="code-img" id="imgVerifyCode" style="width: 80px" />
                 </div>
                 <button type="submit" class="btn cy-btn btn-red" id="btnLogin">登录</button>
@@ -170,24 +170,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

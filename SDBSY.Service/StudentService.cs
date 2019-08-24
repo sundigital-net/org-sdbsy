@@ -578,5 +578,27 @@ namespace SDBSY.Service
                 return list.ToArray();
             }
         }
+
+        public void UpdateImg(long stuId, string url, bool type)
+        {
+            using (MyDBContext mc = new MyDBContext())
+            {
+                BaseService<StudentEntity> bs = new BaseService<StudentEntity>(mc);
+                var stu = bs.GetById(stuId);
+                if (stu == null)
+                {
+                    throw new ArgumentException("不存在的学生信息,id=" + stuId);
+                }
+                if (type)
+                {
+                    stu.PhotoUrl = url;
+                }
+                else
+                {
+                    stu.TijianUrl = url;
+                }
+                mc.SaveChanges();
+            }
+        }
     }
 }

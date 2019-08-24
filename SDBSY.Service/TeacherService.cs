@@ -732,7 +732,7 @@ namespace SDBSY.Service
             dto.Id = entity.Id;
             dto.CertificateId = entity.CertificateId;
             dto.Url = entity.Url;
-            dto.ThumbUrl = entity.ThumbUrl;
+            dto.ThumbUrl = string.IsNullOrEmpty(entity.ThumbUrl) ? entity.Url : entity.ThumbUrl;
             return dto;
         }
 

@@ -29,20 +29,20 @@
                 <div class="row cl">
                     <label class="form-label col-3"><i class="Hui-iconfont">&#xe60d;</i></label>
                     <div class="formControls col-7">
-                        <input id="userName" name="userName" type="text" placeholder="账号" class="input-text size-L" datatype="*1-20" nullmsg="必填">
+                        <input id="userName" name="userName" type="text" placeholder="账号" autocomplete="off" class="input-text size-L" datatype="*1-20" nullmsg="必填">
                     </div>
                     <div class="col-2"> </div>
                 </div>
                 <div class="row cl">
                     <label class="form-label col-3"><i class="Hui-iconfont">&#xe60e;</i></label>
                     <div class="formControls col-7">
-                        <input id="password" name="password" type="password" placeholder="密码" class="input-text size-L" datatype="*1-20" nullmsg="必填">
+                        <input id="password" name="password" type="password" placeholder="密码" autocomplete="off" class="input-text size-L" datatype="*1-20" nullmsg="必填">
                     </div>
                     <div class="col-2"> </div>
                 </div>
                 <div class="row cl">
                     <div class="formControls col-7 col-offset-3">
-                        <input class="input-text size-L" type="text" placeholder="验证码" name="captcha" style="width:150px;" datatype="*4-4" nullmsg="必填">
+                        <input class="input-text size-L" type="text" placeholder="验证码" autocomplete="off" name="captcha" style="width:150px;" datatype="*4-4" nullmsg="必填">
                         <img src="~/Management/CreateCaptcha" id="imgCaptcha"> <a id="kanbuq" href="javascript:;">看不清，换一张</a>
                     </div>
                     <div class="col-2"> </div>
@@ -73,6 +73,7 @@
             $("#admin-login").click(function () {
                 if (validForm.check(false))//校验，返回是否校验成功
                 {
+                    var loading = layer.load(0, { shade: false }); //0代表加载的风格，支持0-2
                     $("#admin-login").val("正在登录...").prop("disabled", true);//按钮不可用
                     var formData = $("#form-login").serializeArray();
                     $.ajax({
@@ -91,6 +92,9 @@
                                     location.reload();
                                 });
                             }
+                        },
+                        complete: function() {
+                            layer.close(loading);
                         },
                         error: function () {
                             layer.msg("网络请求失败", { icon: 2, time: 3000 }, function () {

@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace SDBSY.DTO
 {
-    public class GoodsAllRecordDTO:BaseDTO
+    public class GoodsBuyRecordDTO:BaseDTO
     {
         public string Unit { get; set; }
         public long GoodsId { get; set; }

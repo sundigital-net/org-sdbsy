@@ -37,6 +37,7 @@ namespace SDBSY.Service
         {
             var entity=new InvoiceEntity();
             entity.ClassId = dto.ClassId;
+            entity.IsHouQin = dto.IsHouQin;
             entity.Detail = dto.Detail;
             entity.GoodsName = dto.GoodsName;
             entity.TeacherId = dto.TeacherId;
@@ -75,8 +76,13 @@ namespace SDBSY.Service
             dto.BuyDateTime = entity.BuyDateTime;
             dto.BuyDateTimeStr = entity.BuyDateTime.ToString("yyyy-MM-dd");
             dto.CreateDateTime = entity.CreateDateTime;
+            dto.IsHouQin = entity.IsHouQin;
+            dto.IsHouQinStr = dto.IsHouQin ? "是" : "否";
             dto.ClassId = entity.ClassId;
-            dto.ClassName = entity.Class.Value;
+            if (dto.ClassId.HasValue)
+            {
+                dto.ClassName = entity.Class.Value;
+            }
             dto.GoodsName = entity.GoodsName;
             dto.Detail = entity.Detail;
             dto.Total = entity.Total;
@@ -101,12 +107,26 @@ namespace SDBSY.Service
             return dto;
         }
 
-        public InvoiceDTO[] GetAll()
+        public InvoiceDTO[] GetAll(long? classId, DateTime? startTime, DateTime? endTime)
         {
             using (var mc = new MyDBContext())
             {
                 var bs = new BaseService<InvoiceEntity>(mc);
                 var invoices= bs.GetAll().Include(t => t.Class).Include(t => t.Teacher).ToList();
+                if (classId != null&&classId.Value>0)
+                {
+                    invoices = invoices.Where(t => t.ClassId == classId.Value).ToList();
+                }
+
+                if (startTime != null)
+                {
+                    invoices = invoices.Where(t => t.BuyDateTime >= startTime.Value).ToList();
+                }
+
+                if (endTime != null)
+                {
+                    invoices = invoices.Where(t => t.BuyDateTime < endTime.Value.AddDays(1)).ToList();
+                }
                 var list = new List<InvoiceDTO>();
                 foreach (var invoice in invoices)
                 {
@@ -186,7 +206,7 @@ namespace SDBSY.Service
             dto.Id = entity.Id;
             dto.InvoiceId = entity.InvoiceId;
             dto.Url = entity.Url;
-            dto.ThumbUrl = entity.ThumbUrl;
+            dto.ThumbUrl = string.IsNullOrEmpty(entity.ThumbUrl)?entity.Url:entity.ThumbUrl;
             return dto;
         }
         public InvoicePicDTO[] GetAllPics()

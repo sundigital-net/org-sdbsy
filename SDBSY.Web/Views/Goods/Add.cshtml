@@ -1,4 +1,4 @@
-﻿
+﻿@model GoodsTypeDTO[]
 @{
     Layout = null;
 }
@@ -29,6 +29,14 @@
     <div class="pd-20">
         <form action="" method="post" class="form form-horizontal" id="form-goods-add">
             <div class="row cl">
+                <label class="form-label col-3"><span class="c-red">*</span>物品类别：</label>
+                <div class="formControls col-5">
+                    @Html.DropDownList("goodsTypeId", new SelectList(Model,
+                        nameof(GoodsTypeDTO.Id), nameof(GoodsTypeDTO.Name)), new { @class = "select" })
+                </div>
+                <div class="col-4"> </div>
+            </div>
+            <div class="row cl">
                 <label class="form-label col-3"><span class="c-red">*</span>名称：</label>
                 <div class="formControls col-5">
                     <input type="text" class="input-text" value="" placeholder="物品名称" id="name" name="name" datatype="*" nullmsg="不能为空">
@@ -43,23 +51,23 @@
                 <div class="col-4"> </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-3"><span class="c-red">*</span>规格</label>
+                <label class="form-label col-3"><span class="c-red">*</span>规格：</label>
                 <div class="formControls col-5">
                     <input type="text" class="input-text" value="" id="format" name="format" datatype="*" nullmsg="不能为空">
                 </div>
                 <div class="col-4"> </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-3"><span class="c-red">*</span>卖家：</label>
+                <label class="form-label col-3">销售卖家：</label>
                 <div class="formControls col-5">
-                    <input type="text" class="input-text" value="" placeholder="卖家" id="seller" name="seller" datatype="*" nullmsg="不能为空">
+                    <input type="text" class="input-text" value="" placeholder="销售卖家" id="seller" name="seller" >
                 </div>
                 <div class="col-4"> </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-3">制作商：</label>
+                <label class="form-label col-3">生产制作商：</label>
                 <div class="formControls col-5">
-                    <input type="text" class="input-text" value="" placeholder="制作商" id="maker" name="maker">
+                    <input type="text" class="input-text" value="" placeholder="生产制作商" id="maker" name="maker">
                     <div class="col-4">
                     </div>
                 </div>

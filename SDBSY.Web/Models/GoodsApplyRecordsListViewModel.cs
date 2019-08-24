@@ -6,12 +6,12 @@ using System.Web;
 
 namespace SDBSY.Web.Models
 {
-    public class GoodsApplyRecordsListView
+    public class GoodsApplyRecordsListViewModel
     {
         public long GoodsId { get; set; }
         public GoodsDTO[] Goods { get; set; }
-        public GoodsAllApplyRecordDTO[] Records { get; set; }
-        public string ApplyTime { get; set; }
-        public string ReturnTime { get; set; }
+        public GoodsApplyRecordDTO[] Records { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
     }
 }
